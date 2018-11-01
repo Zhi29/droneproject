@@ -2,49 +2,49 @@ import numpy as np
 import math
 import quaternion
 
-def skew_symetric(self, v):
+def skew_symetric(v):
 	m = np.array([[0,-v[2],v[1]],[v[2],0,-v[0]],[-v[1],v[0],0]])
 	return m
 
-def diff_pq_q(self, p):
+def diff_pq_q(p):
 	p0 = p.w
 	pv = np.array([p.x,p.y,p.z])
 	D = np.zeros((4,4))
 	D[0,0] = p0
 	D[0,1:4] = -1*pv
 	D[1:4,0] = pv.transpose()
-	D[1:4,1:4] = np.eye(3)*p0 + self.skew_symetric(pv)
+	D[1:4,1:4] = np.eye(3)*p0 + skew_symetric(pv)
 	return D
-def diff_pq_p(self, q):
+def diff_pq_p(q):
 	q0 = q.w
 	qv = np.array([q.x,q.y,q.z])
 	D = np.zeros((4,4))
 	D[0,0] = q0
 	D[0,1:4] = -1*qv
 	D[1:4,0] = qv.transpose()
-	D[1:4,1:4] = np.eye(3)*q0 - self.skew_symetric(qv)
+	D[1:4,1:4] = np.eye(3)*q0 - skew_symetric(qv)
 	return D
-def diff_qvqstar_q(self, q, v):
+def diff_qvqstar_q(q, v):
 	q0 = q.w
 	qv = np.array([q.x,q.y,q.z])
 	D = np.zeros((3,4))
-	D[:,0] = 2*(q0*v.transpose() + np.dot(self.skew_symetric(qv),v.transpose()))
-	D[:,1:4] = 2*(np.dot(-1*v.transpose(),qv) + ((v*qv).sum())*np.eye(3) - q0*self.skew_symetric(v))
+	D[:,0] = 2*(q0*v.transpose() + np.dot(skew_symetric(qv),v.transpose()))
+	D[:,1:4] = 2*(np.dot(-1*v.transpose(),qv) + ((v*qv).sum())*np.eye(3) - q0*skew_symetric(v))
 	return D
-def diff_qstarvq_q(self, q, v):
+def diff_qstarvq_q(q, v):
 	q0 = q.w
 	qv = np.array([q.x,q.y,q.z])
 	D = np.zeros((3,4))
-	D[:,0] = 2*(q0*v.transpose() - np.dot(self.skew_symetric(qv),v.transpose()))
-	D[:,1:4] = 2*(np.dot(-1*v.transpose(),qv) + ((v*qv).sum())*np.eye(3) + q0*self.skew_symetric(v))
+	D[:,0] = 2*(q0*v.transpose() - np.dot(skew_symetric(qv),v.transpose()))
+	D[:,1:4] = 2*(np.dot(-1*v.transpose(),qv) + ((v*qv).sum())*np.eye(3) + q0*skew_symetric(v))
 	return D
-def diff_qvqstar_v(self, q):
+def diff_qvqstar_v(q):
 	q0 = q.w
 	qv = np.array([q.x,q.y,q.z])
 	#D = np.zeros((3,3))
-	D = (q0*q0 - (qv*qv).sum())*np.eye(3) + 2*np.dot(qv.transpose(),qv) + 2*q0*self.skew_symetric(qv)
+	D = (q0*q0 - (qv*qv).sum())*np.eye(3) + 2*np.dot(qv.transpose(),qv) + 2*q0*skew_symetric(qv)
 	return D
-def euler2quaternion(self, euler):
+def euler2quaternion(euler):
 	cr = math.cos(euler[0]/2.0)
 	sr = math.sin(euler[0]/2.0)
 	cp = math.cos(euler[1]/2.0)
@@ -57,7 +57,7 @@ def euler2quaternion(self, euler):
 	q.y = cr*sp*cy + sr*cp*sy
 	q.z = cr*cp*sy - sr*sp*cy
 	return q
-def quaternion2mat(self, q):
+def quaternion2mat(q):
 	m = np.zeros((3,3))
 	a = q.w
 	b = q.x
@@ -67,13 +67,13 @@ def quaternion2mat(self, q):
 		[2*(b*c+a*d), a*a - b*b + c*c - d*d, 2*(c*d - a*b)],
 		[2*(b*d - a*c), 2*(c*d+a*b), a*a-b*b - c*c + d*d]])
 	return m
-def mat2eular(self, m):
+def mat2eular(m):
 	r = math.atan2(m[2, 1], m[2, 2])
 	p = math.asin(-1*m[2, 0])
 	y = math.atan2(m[1, 0], m[0, 0])
 	np.array([r, p, y])
 	return rpy
-def mat2quaternion(self, m):
+def mat2quaternion(m):
 	q = np.quaternion(0,0,0,0)
 	a = math.sqrt(1 + m[0, 0] + m[1, 1] + m[2, 2])/2.0
 	b = (m[2, 1] - m[1, 2])/(4.0*a)
@@ -84,7 +84,7 @@ def mat2quaternion(self, m):
 	q.y = c
 	q.z = d
 	return q
-def euler2mat(self, euler):
+def euler2mat(euler):
 	cr = math.cos(euler[0]/1.0)
 	sr = math.sin(euler[0]/1.0)
 	cp = math.cos(euler[1]/1.0)
@@ -96,5 +96,5 @@ def euler2mat(self, euler):
 		[cp*sy,  cr*cy + sr*sp*sy,  -sr*cy + cr*sp*sy], 
 		[-sp,    sr*cp,             cr*cp]])
 	return m
-def quaternion2euler(self, q):
+def quaternion2euler(q):
 	return mat2euler(quaternion2mat(q))
