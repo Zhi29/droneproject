@@ -2,6 +2,7 @@ import numpy as np
 import math
 import random as random
 from manipulation import *
+
 GRAVITY=np.mat(np.array([0,0,9.8]))
 x=np.mat(np.zeros(16))#16 states q p v bw ba
 xdot=np.mat(np.zeros(16))#16 states derivatives
@@ -32,12 +33,9 @@ R*=gravity_cov
 x[0,10:13]=[0,0,0]
 x[0,13:16]=[0,0,0]
 
-initialized = False
-imu_initialized = False
-magnetic_initialized = False
 
 def predict(gyro, acc, t,bA,bb):#t is the time we read data from sensor
-	if imu_initialized ==False:
+	if imu_initialized == False:
 		imu_initialized=True
 		initialized = True
 		current_t=t

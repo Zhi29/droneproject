@@ -14,6 +14,10 @@ imu = navio.mpu9250.MPU9250()
 imu2 = navio.lsm9ds1.LSM9DS1()
 imu_count=0
 
+ekf.initialized = False
+ekf.imu_initialized = False
+ekf.magnetic_initialized = False
+
 if imu.testConnection():
     print "Connection established: True"
 else:
