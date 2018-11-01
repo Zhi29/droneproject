@@ -5,8 +5,8 @@ import argparse
 import sys
 import navio.mpu9250
 import navio.util
-#from  EKF import *
-import EKF as ekf
+from  EKF import *
+#import EKF as ekf
 
 navio.util.check_apm()
 
@@ -14,9 +14,6 @@ imu = navio.mpu9250.MPU9250()
 imu2 = navio.lsm9ds1.LSM9DS1()
 imu_count=0
 
-ekf.initialized = False
-ekf.imu_initialized = False
-ekf.magnetic_initialized = False
 
 if imu.testConnection():
     print "Connection established: True"
@@ -48,10 +45,10 @@ while True:
 			bb = B/20.0
 			bA = bA -[0,0,9.8]
 		print bA,bb
-		ekf.predict(gyro, acc, t,bA,bb)
+		predict(gyro, acc, t,bA,bb)
 		imu_count+=1
 		#if imu_count%10==0:
-		ekf.update(acc,t)
+		update(acc,t)
 	#print("position: ", ekf.x[4:7], "velocity", ekf.x[7:10])
 	print "---------------------------------------------------------------------------------"
 	i = i + 1
