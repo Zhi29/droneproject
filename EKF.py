@@ -35,6 +35,7 @@ x[0,13:16]=[0,0,0]
 
 
 def predict(gyro, acc, t,bA,bb):#t is the time we read data from sensor
+	global imu_initialized, initialized
 	if imu_initialized == False:
 		imu_initialized=True
 		initialized = True
