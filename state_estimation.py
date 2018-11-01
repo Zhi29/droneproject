@@ -1,3 +1,4 @@
+import numpy as np
 import spidev
 import time
 import argparse 
