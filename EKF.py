@@ -29,8 +29,8 @@ x[0]=1
 Q[0:3,0:3]*=gyro_cov
 Q[3:6,3:6]*=acc_cov
 R*=gravity_cov
-x[10:13]=[0,0,0]
-x[13:16]=[0,0,0]
+x[0,10:13]=[0,0,0]
+x[0,13:16]=[0,0,0]
 
 initialized = False
 imu_initialized = False
