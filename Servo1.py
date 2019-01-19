@@ -86,16 +86,16 @@ def calibration_ESC():
     loop_for(2, pwm0.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
     loop_for(4, pwm0.set_duty_cycle, SERVO_MIN)
-    print("SERVO_MIN_AGAIN")
-    loop_for(6, pwm0.set_duty_cycle, SERVO_MIN)
+    #print("SERVO_MIN_AGAIN")
+    #loop_for(6, pwm0.set_duty_cycle, SERVO_MIN)
 
 
     print("SERVO_MAX")
     loop_for(2, pwm1.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
     loop_for(4, pwm1.set_duty_cycle, SERVO_MIN)
-    print("SERVO_MIN_AGAIN")
-    loop_for(6, pwm1.set_duty_cycle, SERVO_MIN)
+    #print("SERVO_MIN_AGAIN")
+    #loop_for(6, pwm1.set_duty_cycle, SERVO_MIN)
 
     #pwm2 = navio.pwm.PWM(PWM_OUTPUT_2)
     #pwm2.initialize()
@@ -105,15 +105,15 @@ def calibration_ESC():
     loop_for(2, pwm2.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
     loop_for(4, pwm2.set_duty_cycle, SERVO_MIN)
-    print("SERVO_MIN_AGAIN")
-    loop_for(6, pwm2.set_duty_cycle, SERVO_MIN)
+    #print("SERVO_MIN_AGAIN")
+    #loop_for(6, pwm2.set_duty_cycle, SERVO_MIN)
 
     print("SERVO_MAX")
     loop_for(2, pwm3.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
     loop_for(4, pwm3.set_duty_cycle, SERVO_MIN)
-    print("SERVO_MIN_AGAIN")
-    loop_for(6, pwm3.set_duty_cycle, SERVO_MIN)
+    #print("SERVO_MIN_AGAIN")
+    #loop_for(6, pwm3.set_duty_cycle, SERVO_MIN)
 
 
 
@@ -148,10 +148,11 @@ def test_throttle():
         if i == 0.400:
             Loop = False
 
-    pwm0.set_duty_cycle(SERVO_MIN)
-    pwm1.set_duty_cycle(SERVO_MIN)
-    pwm2.set_duty_cycle(SERVO_MIN)
-    pwm3.set_duty_cycle(SERVO_MIN)
+    loop_for(0.1, pwm0.set_duty_cycle, SERVO_MIN)
+    loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
+    loop_for(0.1, pwm2.set_duty_cycle, SERVO_MIN)
+    loop_for(0.1, pwm3.set_duty_cycle, SERVO_MIN)
+
 
 test_throttle()
 
