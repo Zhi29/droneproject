@@ -114,7 +114,7 @@ def calibration_ESC():
     loop_for(4, pwm3.set_duty_cycle, SERVO_MIN)
     #print("SERVO_MIN_AGAIN")
     #loop_for(6, pwm3.set_duty_cycle, SERVO_MIN)
-    time.sleep(5)
+
 
 
    # print("SERVO_MIN_AGAIN")
@@ -126,9 +126,10 @@ def calibration_ESC():
    # print("Stop")
    # loop_for(2, pwm.set_duty_cycle, SERVO_STOP)
 
-calibration_ESC() 
+#calibration_ESC() 
 
 def test_throttle():
+    time.sleep(10)
     i = 0.000
     Loop = True
     while Loop:
