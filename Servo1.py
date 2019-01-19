@@ -18,6 +18,28 @@ SERVO_NOM = 1.500 #ms
 SERVO_NOM_1 = 1.350
 SERVO_STOP = 0.000
 
+pwm0 = navio.pwm.PWM(PWM_OUTPUT_0)
+pwm1 = navio.pwm.PWM(PWM_OUTPUT_1)
+pwm2 = navio.pwm.PWM(PWM_OUTPUT_2)
+pwm3 = navio.pwm.PWM(PWM_OUTPUT_3)
+# pwm.initialize()
+# pwm.set_period(50)
+# pwm.enable()
+pwm0.initialize()
+pwm1.initialize()
+pwm2.initialize()
+pwm3.initialize()
+
+pwm0.set_period(50)
+pwm1.set_period(50)
+pwm2.set_period(50)
+pwm3.set_period(50)
+
+pwm0.enable()
+pwm1.enable()
+pwm2.enable()
+pwm3.enable()
+
 def loop_for(seconds, func, *args):
     endTime = datetime.datetime.now() + datetime.timedelta(seconds=seconds)
 
@@ -29,6 +51,7 @@ def loop_for(seconds, func, *args):
 
 
 def calibration_ESC():
+    '''
     #pwm =  navio.pwm.PWM(PWM_OUTPUT)
     pwm0 = navio.pwm.PWM(PWM_OUTPUT_0)
     pwm1 = navio.pwm.PWM(PWM_OUTPUT_1)
@@ -51,7 +74,7 @@ def calibration_ESC():
     pwm1.enable()
     pwm2.enable()
     pwm3.enable()
-
+'''
     print("SERVO_MAX")
     loop_for(5, pwm0.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
