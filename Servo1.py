@@ -148,7 +148,7 @@ def test_throttle():
 
         i = i + 0.050 
 
-        if i == 0.500:
+        if i >= 0.500:
             Loop = False
 
     loop_for(0.1, pwm0.set_duty_cycle, SERVO_MIN)
