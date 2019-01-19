@@ -81,13 +81,13 @@ def calibration_ESC():
     pwm2.set_duty_cycle(SERVO_STOP)
     pwm3.set_duty_cycle(SERVO_STOP)
 
-    
+
     print("SERVO_MAX")
     loop_for(5, pwm0.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
     loop_for(5, pwm0.set_duty_cycle, SERVO_MIN)
     print("SERVO_MIN_AGAIN")
-    loop_for(7, pwm0.set_duty_cycle, SERVO_STOP)
+    loop_for(7, pwm0.set_duty_cycle, SERVO_MIN_AGAIN)
 
 
     print("SERVO_MAX")
@@ -95,7 +95,7 @@ def calibration_ESC():
     print("SERVO_MIN")
     loop_for(5, pwm1.set_duty_cycle, SERVO_MIN)
     print("SERVO_MIN_AGAIN")
-    loop_for(7, pwm1.set_duty_cycle, SERVO_STOP)
+    loop_for(7, pwm1.set_duty_cycle, SERVO_MIN_AGAIN)
 
     #pwm2 = navio.pwm.PWM(PWM_OUTPUT_2)
     #pwm2.initialize()
@@ -106,14 +106,14 @@ def calibration_ESC():
     print("SERVO_MIN")
     loop_for(5, pwm2.set_duty_cycle, SERVO_MIN)
     print("SERVO_MIN_AGAIN")
-    loop_for(7, pwm2.set_duty_cycle, SERVO_STOP)
+    loop_for(7, pwm2.set_duty_cycle, SERVO_MIN_AGAIN)
 
     print("SERVO_MAX")
     loop_for(5, pwm3.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
     loop_for(5, pwm3.set_duty_cycle, SERVO_MIN)
     print("SERVO_MIN_AGAIN")
-    loop_for(7, pwm3.set_duty_cycle, SERVO_STOP)
+    loop_for(7, pwm3.set_duty_cycle, SERVO_MIN_AGAIN)
 
 
 
