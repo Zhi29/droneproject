@@ -139,20 +139,21 @@ def test_throttle():
         pwm2.set_duty_cycle(1.25+i/100)
         pwm3.set_duty_cycle(1.25+i/100)
         '''
-        loop_for(0.01, pwm0.set_duty_cycle, 1.250+i)
-        loop_for(0.01, pwm1.set_duty_cycle, 1.250+i)
-        loop_for(0.01, pwm2.set_duty_cycle, 1.250+i)
-        loop_for(0.01, pwm3.set_duty_cycle, 1.250+i)
+        SERVO_INPUT = 1.250 + i
+        loop_for(0.01, pwm0.set_duty_cycle, SERVO_INPUT)
+        loop_for(0.01, pwm1.set_duty_cycle, SERVO_INPUT)
+        loop_for(0.01, pwm2.set_duty_cycle, SERVO_INPUT)
+        loop_for(0.01, pwm3.set_duty_cycle, SERVO_INPUT)
 
         i = i + 0.050 
 
-        if i == 0.400:
+        if i == 0.200:
             Loop = False
 
-    loop_for(0.1, pwm0.set_duty_cycle, SERVO_MIN)
-    loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
-    loop_for(0.1, pwm2.set_duty_cycle, SERVO_MIN)
-    loop_for(0.1, pwm3.set_duty_cycle, SERVO_MIN)
+    loop_for(1, pwm0.set_duty_cycle, SERVO_MIN)
+    loop_for(1, pwm1.set_duty_cycle, SERVO_MIN)
+    loop_for(1, pwm2.set_duty_cycle, SERVO_MIN)
+    loop_for(1, pwm3.set_duty_cycle, SERVO_MIN)
 
 
 test_throttle()
