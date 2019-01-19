@@ -83,37 +83,37 @@ def calibration_ESC():
 
 
     print("SERVO_MAX")
-    loop_for(5, pwm0.set_duty_cycle, SERVO_MAX)
+    loop_for(2, pwm0.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
-    loop_for(5, pwm0.set_duty_cycle, SERVO_MIN)
+    loop_for(4, pwm0.set_duty_cycle, SERVO_MIN)
     print("SERVO_MIN_AGAIN")
-    loop_for(7, pwm0.set_duty_cycle, SERVO_MIN)
+    loop_for(6, pwm0.set_duty_cycle, SERVO_MIN)
 
 
     print("SERVO_MAX")
-    loop_for(5, pwm1.set_duty_cycle, SERVO_MAX)
+    loop_for(2, pwm1.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
-    loop_for(5, pwm1.set_duty_cycle, SERVO_MIN)
+    loop_for(4, pwm1.set_duty_cycle, SERVO_MIN)
     print("SERVO_MIN_AGAIN")
-    loop_for(7, pwm1.set_duty_cycle, SERVO_MIN)
+    loop_for(6, pwm1.set_duty_cycle, SERVO_MIN)
 
     #pwm2 = navio.pwm.PWM(PWM_OUTPUT_2)
     #pwm2.initialize()
     #pwm2.set_period(50)
     #pwm2.enable()
     print("SERVO_MAX")
-    loop_for(5, pwm2.set_duty_cycle, SERVO_MAX)
+    loop_for(2, pwm2.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
-    loop_for(5, pwm2.set_duty_cycle, SERVO_MIN)
+    loop_for(4, pwm2.set_duty_cycle, SERVO_MIN)
     print("SERVO_MIN_AGAIN")
-    loop_for(7, pwm2.set_duty_cycle, SERVO_MIN)
+    loop_for(6, pwm2.set_duty_cycle, SERVO_MIN)
 
     print("SERVO_MAX")
-    loop_for(5, pwm3.set_duty_cycle, SERVO_MAX)
+    loop_for(2, pwm3.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
-    loop_for(5, pwm3.set_duty_cycle, SERVO_MIN)
+    loop_for(4, pwm3.set_duty_cycle, SERVO_MIN)
     print("SERVO_MIN_AGAIN")
-    loop_for(7, pwm3.set_duty_cycle, SERVO_MIN)
+    loop_for(6, pwm3.set_duty_cycle, SERVO_MIN)
 
 
 
@@ -130,11 +130,16 @@ calibration_ESC()
 
 def test_throttle():
     for i in range(30):
+        '''
         pwm0.set_duty_cycle(1.25+i/100)
         pwm1.set_duty_cycle(1.25+i/100)
         pwm2.set_duty_cycle(1.25+i/100)
         pwm3.set_duty_cycle(1.25+i/100)
-        time.sleep(0.1)
+        '''
+        loop_for(0.1, pwm0.set_duty_cycle, 1.25+i/100)
+        loop_for(0.1, pwm1.set_duty_cycle, 1.25+i/100)
+        loop_for(0.1, pwm2.set_duty_cycle, 1.25+i/100)
+        loop_for(0.1, pwm3.set_duty_cycle, 1.25+i/100)
     pwm0.set_duty_cycle(SERVO_MIN)
     pwm1.set_duty_cycle(SERVO_MIN)
     pwm2.set_duty_cycle(SERVO_MIN)
