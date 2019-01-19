@@ -126,7 +126,7 @@ def calibration_ESC():
    # print("Stop")
    # loop_for(2, pwm.set_duty_cycle, SERVO_STOP)
 
-#calibration_ESC() 
+calibration_ESC() 
 
 def test_throttle():
     i = 0.000
