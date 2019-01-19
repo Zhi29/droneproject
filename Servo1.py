@@ -129,17 +129,25 @@ def calibration_ESC():
 #calibration_ESC() 
 
 def test_throttle():
-    for i in range(30):
+    i = 0.000
+    Loop = True
+    while Loop:
         '''
         pwm0.set_duty_cycle(1.25+i/100)
         pwm1.set_duty_cycle(1.25+i/100)
         pwm2.set_duty_cycle(1.25+i/100)
         pwm3.set_duty_cycle(1.25+i/100)
         '''
-        loop_for(0.5, pwm0.set_duty_cycle, 1.25+i/100*1.0)
-        loop_for(0.5, pwm1.set_duty_cycle, 1.25+i/100*1.0)
-        loop_for(0.5, pwm2.set_duty_cycle, 1.25+i/100*1.0)
-        loop_for(0.5, pwm3.set_duty_cycle, 1.25+i/100*1.0)
+        loop_for(0.5, pwm0.set_duty_cycle, 1.250+i)
+        loop_for(0.5, pwm1.set_duty_cycle, 1.250+i)
+        loop_for(0.5, pwm2.set_duty_cycle, 1.250+i)
+        loop_for(0.5, pwm3.set_duty_cycle, 1.250+i)
+
+        i = i + 0.050 
+
+        if i == 0.500:
+            Loop = False
+
     pwm0.set_duty_cycle(SERVO_MIN)
     pwm1.set_duty_cycle(SERVO_MIN)
     pwm2.set_duty_cycle(SERVO_MIN)
