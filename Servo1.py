@@ -75,6 +75,13 @@ def calibration_ESC():
     pwm2.enable()
     pwm3.enable()
 '''
+    print("set all pwm to 0")
+    pwm0.set_duty_cycle(SERVO_STOP)
+    pwm1.set_duty_cycle(SERVO_STOP)
+    pwm2.set_duty_cycle(SERVO_STOP)
+    pwm3.set_duty_cycle(SERVO_STOP)
+
+    
     print("SERVO_MAX")
     loop_for(5, pwm0.set_duty_cycle, SERVO_MAX)
     print("SERVO_MIN")
