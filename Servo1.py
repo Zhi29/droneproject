@@ -164,7 +164,7 @@ def test_throttle_via_RC():
     wait_until_motor_is_ready()
     Loop = True
     while Loop:
-        period = rcin.read(2)
+        period = float(rcin.read(2))/1000.000
         print("rcinput_value: ", period)
         loop_for(0.01, pwm0.set_duty_cycle, period)
         loop_for(0.01, pwm1.set_duty_cycle, period)
