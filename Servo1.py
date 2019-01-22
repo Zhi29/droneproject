@@ -5,9 +5,14 @@ import navio.pwm
 import navio.util
 import datetime
 import curses
+import navio.rcinput
 
 navio.util.check_apm()
 
+
+rcin = navio.rcinput.RCInput()
+
+#PWM SETTING######################################################
 #PWM_OUTPUT = 1
 PWM_OUTPUT_0  = 0
 PWM_OUTPUT_1  = 1
@@ -40,6 +45,8 @@ pwm0.enable()
 pwm1.enable()
 pwm2.enable()
 pwm3.enable()
+##################################################################
+
 
 def loop_for(seconds, func, *args):
     endTime = datetime.datetime.now() + datetime.timedelta(seconds=seconds)
@@ -134,12 +141,7 @@ def test_throttle():
     i = 0.000
     Loop = True
     while Loop:
-        '''
-        pwm0.set_duty_cycle(1.25+i/100)
-        pwm1.set_duty_cycle(1.25+i/100)
-        pwm2.set_duty_cycle(1.25+i/100)
-        pwm3.set_duty_cycle(1.25+i/100)
-        '''
+
         print("i: ",i)
         SERVO_INPUT = 1.250 + i
         loop_for(0.01, pwm0.set_duty_cycle, SERVO_INPUT)
@@ -158,8 +160,23 @@ def test_throttle():
     loop_for(0.1, pwm2.set_duty_cycle, SERVO_MIN)
     loop_for(0.1, pwm3.set_duty_cycle, SERVO_MIN)
 
+def test_throttle_via_RC():
+    wait_until_motor_is_ready()
+    Loop = True
+    while Loop:
+        period = rcin.read(2)
+        print("rcinput_value: ", period)
+        loop_for(0.01, pwm0.set_duty_cycle, period)
+        loop_for(0.01, pwm1.set_duty_cycle, period)
+        loop_for(0.01, pwm2.set_duty_cycle, period)
+        loop_for(0.01, pwm3.set_duty_cycle, period)
+
+test_throttle_via_RC()
+
+
 
 def wait_until_motor_is_ready():
+    print("I am in the wait_until_motor_is_ready()")
     loop_for(0.1, pwm0.set_duty_cycle, SERVO_MIN)
     loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
     loop_for(0.1, pwm2.set_duty_cycle, SERVO_MIN)
@@ -172,6 +189,9 @@ def wait_until_motor_is_ready():
 
 #test_throttle()
 
+
+
+'''
 
 # get the curses screen window
 screen = curses.initscr()
@@ -203,3 +223,4 @@ finally:
     # shut down cleanly
     curses.nocbreak(); screen.keypad(0); curses.echo()
     curses.endwin()
+'''
