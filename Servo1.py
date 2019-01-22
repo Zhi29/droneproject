@@ -4,6 +4,7 @@ import time
 import navio.pwm
 import navio.util
 import datetime
+import curses
 
 navio.util.check_apm()
 
@@ -126,10 +127,10 @@ def calibration_ESC():
    # print("Stop")
    # loop_for(2, pwm.set_duty_cycle, SERVO_STOP)
 
-calibration_ESC() 
+#calibration_ESC() 
 
 def test_throttle():
-    time.sleep(2)
+    wait_until_motor_is_ready()
     i = 0.000
     Loop = True
     while Loop:
@@ -158,5 +159,47 @@ def test_throttle():
     loop_for(0.1, pwm3.set_duty_cycle, SERVO_MIN)
 
 
-test_throttle()
+def wait_until_motor_is_ready():
+    loop_for(0.1, pwm0.set_duty_cycle, SERVO_MIN)
+    loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
+    loop_for(0.1, pwm2.set_duty_cycle, SERVO_MIN)
+    loop_for(0.1, pwm3.set_duty_cycle, SERVO_MIN)
 
+    time.sleep(8)
+
+
+
+
+#test_throttle()
+
+
+# get the curses screen window
+screen = curses.initscr()
+
+# turn off input echoing
+curses.noecho()
+
+# respond to keys immediately (don't wait for enter)
+curses.cbreak()
+
+# map arrow keys to special values
+screen.keypad(True)
+
+try:
+    while True:
+        char = screen.getch()
+        if char == ord('q'): 
+            break
+        elif char == curses.KEY_RIGHT:
+            # print doesn't work with curses, use addstr instead
+            screen.addstr(0, 0, 'right')
+        elif char == curses.KEY_LEFT:
+            screen.addstr(0, 0, 'left ')        
+        elif char == curses.KEY_UP:
+            screen.addstr(0, 0, 'up   ')        
+        elif char == curses.KEY_DOWN:
+            screen.addstr(0, 0, 'down ')
+finally:
+    # shut down cleanly
+    curses.nocbreak(); screen.keypad(0); curses.echo()
+    curses.endwin()
