@@ -171,7 +171,7 @@ def test_throttle_via_RC():
         loop_for(0.01, pwm2.set_duty_cycle, period)
         loop_for(0.01, pwm3.set_duty_cycle, period)
 
-test_throttle_via_RC()
+
 
 
 
@@ -185,7 +185,7 @@ def wait_until_motor_is_ready():
     time.sleep(8)
 
 
-
+test_throttle_via_RC()
 
 #test_throttle()
 
