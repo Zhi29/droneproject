@@ -18,8 +18,8 @@ PWM_OUTPUT_0  = 0
 PWM_OUTPUT_1  = 1
 PWM_OUTPUT_2  = 2
 PWM_OUTPUT_3  = 3
-SERVO_MIN = 1.250 #ms
-SERVO_MAX = 1.750 #ms
+SERVO_MIN = 1.072 #ms
+SERVO_MAX = 1.935 #ms
 SERVO_NOM = 1.500 #ms
 SERVO_NOM_1 = 1.350
 SERVO_STOP = 0.000
@@ -185,6 +185,8 @@ def wait_until_motor_is_ready():
     time.sleep(8)
 
 
+
+calibration_ESC()
 test_throttle_via_RC()
 
 #test_throttle()
