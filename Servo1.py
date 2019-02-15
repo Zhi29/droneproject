@@ -286,11 +286,123 @@ b =
 K_p_phi = 
 K_p_theta = 
 K_p_psi = 
+
 K_d_phi = 
 K_d_theta = 
 K_d_psi = 
 
+K_p_x = 
+K_p_y = 
+K_p_z = 
+ 
+K_d_x = 
+K_d_y = 
+K_d_z = 
 
+K_p = np.array([[K_p_x,0,0],[0,K_p_y,0],[0,0,K_p_z]])
+K_d = np.array([[K_d_x,0,0],[0,K_d_y,0],[0,0,K_d_z]])
+
+K_p_Pose = np.array([[K_p_phi,0,0],[0,K_p_theta,0],[0,0,K_p_psi]])
+K_d_Pose = np.array([[K_d_phi,0,0],[0,K_d_theta,0],[0,0,K_d_psi]])
+
+def position_control(desired_pos_info, pos, vel): #input should be generated trajectory
+    #calculate errors of position, velocity and acceleration.
+    desired_pos, desired_vel, acc_desired, desired_psy = desired_pos_info
+    pos_error = desired_pos - pos
+    vel_error = desired_vel - vel 
+    #acc_desired come from derivative of trajectory
+
+    #calculate acc command
+    acc_command = acc_desired + K_d*vel_error + K_p*pos_error
+
+    #calculate the total thrust for 4 motors
+    u1 = m*g + m*acc_command[2] # scalar i.e. summation of 4 thrust
+
+    # derive desired phi and desired pitch
+    desired_phi = 1/g * (acc_command[0] * sin(desired_psy) - acc_command[1] * cos(desired_psy))
+    desired_pitch = 1/g * (acc_command[0] * cos(desired_psy) - acc_command[1] * sin(desired_psy))
+
+    desired_pose = np.array([desired_phi, desired_pitch, desired_psy])
+
+    return u1, desired_pose
+
+def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler angle and angular rate and feedback pose info
+    #specify desired Angular velocity
+    #Note for hover or near hover state, the desired angular velocity for phi and pitch should be 0
+    desired_phi_vel = 0
+    desired_pitch_vel = 0
+    desired_psy_vel = 0 # angular velocity for yaw is not necessarily 0
+    desired_A_vel = np.array([desired_phi_vel, desired_pitch_vel, desired_psy_vel])    
+
+    #calculate errors of Euler angle and angular rate
+    A_vel_error = desired_A_vel - A_vel
+    Euler_error = desired_pose - Euler
+
+    #implement control for attitude
+    u2 = np.zeros((3,3))
+    u2 = Inertia * (K_p_Pose * Euler_error + K_d_Pose * A_vel_error)
+
+    return u2 
+
+
+def motor_mix_controller(u1, u2):
+    # upper right is the #1 motor and bottom left is #2.
+    # upper left is the #3 motor and bottom right is #4.
+    # The total torque for ROLL is calculated by 1/sqrt(2)* (F2 + F3 - F1 - F4)
+    # the total torque for PITCH is calculated by 1/sqrt(2)* (F2 + F4 - F1 - F3)
+    # the total torque for YAW is calculated by M1 + M2 - M3 -M4
+    # the total thrust is F1 + F2 + F3 + F4
+
+    # The transform matrix between [u1,u2] and [F1, F2, F3, F4] is :
+    cof = 1/np.sqrt(2)
+    Motor_mix = np.array([[1,1,1,1],[-cof * L, cof * L, cof * L, -cof * L],
+                        [-cof * L, cof * L, -cof * L, cof * L],[gamma, gamma, -gamma, -gamma]])
+
+    # thrust for each motor is
+    Force = np.linalg.inv(Motor_mix) * np.array([u1,u2[0],u2[1],u2[2]])
+
+    # transform force of each motor into rotation speed :
+    omega = sqrt(1/k * Force)
+
+    # transform rotation speed into PWM duty cycles : 
+        # note that PWM duty cycles may need saturation.
+    control_PWM = k_pwm * omega
+    for i in range(4):
+        if control_PWM[i] > pwm_thres:
+            control_PWM[i] = pwm_thres
+
+    return control_PWM
+
+def drive_motor(control_PWM):
+    # this function is mainly used to pass duty cycle into navio hardware to drive motor.
+    loop_for(0.01, pwm0.set_duty_cycle, control_PWM[0])
+    loop_for(0.01, pwm1.set_duty_cycle, control_PWM[1])
+    loop_for(0.01, pwm2.set_duty_cycle, control_PWM[2])
+    loop_for(0.01, pwm3.set_duty_cycle, control_PWM[3])
+
+def main_control_loop():
+    # getting the desired position and yaw angle from trajectory planner: 
+    #desired_pos_info = traj_planner()
+
+    Loop = True 
+    count = 0
+    while Loop:
+        # reading positional info from optitrack:
+        pos, Euler, vel, A_vel = reading_positional_info()
+
+        u1, desired_pos = position_control(desired_pos_info, pos, vel)
+
+        for i in range(5):
+            pos, Euler, vel, A_vel = reading_positional_info()
+            u2 = attitude_control(Euler, A_vel, desired_pos)
+        control_PWM = motor_mix_controller(u1, u2)
+        drive_motor(control_PWM)
+
+
+
+
+
+'''
 def main_control_loop(): 
     pos,Euler,vel,A_vel = reading_positional_info()
     # calculate errors
@@ -318,7 +430,7 @@ def main_control_loop():
     loop_for(0.01, pwm1.set_duty_cycle, period)
     loop_for(0.01, pwm2.set_duty_cycle, period)
     loop_for(0.01, pwm3.set_duty_cycle, period)
-
+'''
 
 
 
