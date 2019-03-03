@@ -238,7 +238,7 @@ def quaternion2euler(q):
 
     
 
-calibration_ESC()
+#calibration_ESC()
 test_throttle_via_RC()
 
 #test_throttle()
@@ -269,7 +269,7 @@ length of frame
 k relationship between thrust and pwms
 b the relationship between torque and summation of raotation speed
 '''
-
+'''
 m = 5   # MASS
 Ixx = 
 Iyy = 
@@ -354,12 +354,13 @@ def motor_mix_controller(u1, u2):
     # the total thrust is F1 + F2 + F3 + F4
 
     # The transform matrix between [u1,u2] and [F1, F2, F3, F4] is :
-    cof = 1/np.sqrt(2)
+    cof = 0.5*np.sqrt(2)
     Motor_mix = np.array([[1,1,1,1],[-cof * L, cof * L, cof * L, -cof * L],
                         [-cof * L, cof * L, -cof * L, cof * L],[gamma, gamma, -gamma, -gamma]])
 
     # thrust for each motor is
-    Force = np.linalg.inv(Motor_mix) * np.array([u1,u2[0],u2[1],u2[2]])
+    # the Force vector is force for each motor.
+    Force = np.dot(np.linalg.inv(Motor_mix), np.array([u1,u2[0],u2[1],u2[2]]))
 
     # transform force of each motor into rotation speed :
     omega = sqrt(1/k * Force)
@@ -386,10 +387,9 @@ def main_control_loop():
 
     Loop = True 
     count = 0
-    while Loop:
+    while Loop: 
         # reading positional info from optitrack:
         pos, Euler, vel, A_vel = reading_positional_info()
-
         u1, desired_pos = position_control(desired_pos_info, pos, vel)
 
         for i in range(5):
@@ -397,6 +397,33 @@ def main_control_loop():
             u2 = attitude_control(Euler, A_vel, desired_pos)
         control_PWM = motor_mix_controller(u1, u2)
         drive_motor(control_PWM)
+
+def simulation():
+    start_time = 0
+    end_time = 10
+    dt = 0.005
+
+    #initial simulation state
+    x = np.array([0,0,0])
+    x_dot = np.zeros(3)
+    theta = np.zeros(3)
+
+    #Simulation some disturbance 
+
+
+    #Step through the simulation, updating the state
+    for i in range(start_time, end_time, dt):
+        #Take inputs from controllers
+        
+
+
+
+
+
+'''
+
+
+
 
 
 
