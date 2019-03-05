@@ -126,7 +126,6 @@ def calibration_ESC():
     print("SERVO_MIN_AGAIN")
     loop_for(6, pwm3.set_duty_cycle, SERVO_MIN)
 
-#calibration_ESC() 
 
 def test_throttle():
     wait_until_motor_is_ready()
@@ -243,8 +242,6 @@ test_throttle_via_RC()
 
 #test_throttle()
 
-
-
 '''
 
 we need first give some desire values of positional info. 
@@ -273,7 +270,7 @@ b the relationship between torque and summation of raotation speed
 # Simulation parameters
 g = 9.81
 m = 2.3 #kg
-L = 0.28 
+L = 0.28 # m 
 Ixx = 3.613e-2 
 Iyy = 3.613e-2 
 Izz = 6.707e-2 
@@ -289,8 +286,8 @@ gamma = b/k
 wb = 144.37 # rad/s
 Cr = 615.1 # rad/s
 
-Max_PWM_Hz = 800
-Min_PWM_Hz = 571.4
+Max_PWM_Hz = 800  # Hz
+Min_PWM_Hz = 571.4 # Hz
 
 pwm_thres = 1/SERVO_MIN * 0.9
 
@@ -301,11 +298,11 @@ Motor_mix = np.linalg.inv(np.array([[0.8,0.8,0.8,0.8],[-cof * L, cof * L, cof * 
 #PD control parameters#######################################
 K_p_roll = 25
 K_p_pitch = 5
-K_p_psi = 25
+K_p_yaw = 25
 
 K_d_roll = 0.5 #0.1
 K_d_pitch = 0.5 #0.1
-K_d_psi = 0.5  # 0.1
+K_d_yaw = 0.5  # 0.1
 
 K_p_x = 1.5 #1
 K_p_y = 1.5 #1
@@ -319,8 +316,8 @@ K_d_z = 0.025 #0.01
 K_p = np.array([[K_p_x,0,0],[0,K_p_y,0],[0,0,K_p_z]])
 K_d = np.array([[K_d_x,0,0],[0,K_d_y,0],[0,0,K_d_z]])
 
-K_p_Pose = np.array([[K_p_phi,0,0],[0,K_p_theta,0],[0,0,K_p_psi]])
-K_d_Pose = np.array([[K_d_phi,0,0],[0,K_d_theta,0],[0,0,K_d_psi]])
+K_p_Pose = np.array([[K_p_phi,0,0],[0,K_p_theta,0],[0,0,K_p_yaw]])
+K_d_Pose = np.array([[K_d_phi,0,0],[0,K_d_theta,0],[0,0,K_d_yaw]])
 
 
 def position_control(desired_pos_info, pos, vel): #input should be generated trajectory
@@ -507,7 +504,7 @@ def main_control_loop(x_c, y_c, z_c):
             pos, Euler, vel, A_vel = reading_positional_info()
             u1, desired_pos = position_control(desired_pos_info, pos, vel)
 
-            for i in range(5):
+            for ii in range(5):
                 pos, Euler, vel, A_vel = reading_positional_info()
                 u2 = attitude_control(Euler, A_vel, desired_pos)
                 control_PWM = motor_mix_controller(u1, u2)
@@ -542,6 +539,7 @@ def main():
         y_coeffs[i] = traj.y_c
         z_coeffs[i] = traj.z_c
     """
+    wait_until_motor_is_ready()
 
     pos, _, _, _ = reading_positional_info()
     x_start = pos[0]
@@ -561,6 +559,10 @@ def main():
         z_coeffs[i] = traj.z_c
 
     main_control_loop(x_coeffs, y_coeffs, z_coeffs)
+
+def before_test():
+    wait_until_motor_is_ready()
+    pos, Euler, vel, A_vel = reading_positional_info()
 
 
 if __name__ == "__main__":
