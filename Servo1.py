@@ -238,7 +238,7 @@ def quaternion2euler(q):
     
 
 #calibration_ESC()
-test_throttle_via_RC()
+#test_throttle_via_RC()
 
 #test_throttle()
 
@@ -526,19 +526,6 @@ def main():
     Calculates the x, y, z coefficients for the four segments 
     of the trajectory
     """
-    """
-    x_coeffs = [[], [], [], []]
-    y_coeffs = [[], [], [], []]
-    z_coeffs = [[], [], [], []]
-    waypoints = [[-5, -5, 5], [5, -5, 5], [5, 5, 5], [-5, 5, 5]]
-
-    for i in range(4):
-        traj = TrajectoryGenerator(waypoints[i], waypoints[(i + 1) % 4], T)
-        traj.solve()
-        x_coeffs[i] = traj.x_c
-        y_coeffs[i] = traj.y_c
-        z_coeffs[i] = traj.z_c
-    """
     wait_until_motor_is_ready()
 
     pos, _, _, _ = reading_positional_info()
@@ -563,7 +550,12 @@ def main():
 def before_test():
     wait_until_motor_is_ready()
     pos, Euler, vel, A_vel = reading_positional_info()
+    print("pos", pos)
+    print("Euler: ", Euler)
+    print("vel", vel)
+    print("A-vel", A_vel)
 
 
 if __name__ == "__main__":
-    main()
+    while True:
+        before_test()
