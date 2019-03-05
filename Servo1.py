@@ -2,6 +2,7 @@ import sys
 import time
 import math
 
+import numpy as np
 import navio.pwm
 import navio.util
 import datetime
