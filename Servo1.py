@@ -13,6 +13,7 @@ from collections import deque
 import zmq
 import json
 
+from TrajectoryGenerator import TrajectoryGenerator
 
 navio.util.check_apm()
 
@@ -20,13 +21,12 @@ navio.util.check_apm()
 rcin = navio.rcinput.RCInput()
 
 #PWM SETTING######################################################
-
 PWM_OUTPUT_0  = 0
 PWM_OUTPUT_1  = 1
 PWM_OUTPUT_2  = 2
 PWM_OUTPUT_3  = 3
-SERVO_MIN = 1.072 #ms
-SERVO_MAX = 1.935 #ms
+SERVO_MIN = 1.250 #1.072 #ms
+SERVO_MAX = 1.750 #1.935 #ms  571.4 - 800 
 SERVO_NOM = 1.500 #ms
 SERVO_NOM_1 = 1.350
 SERVO_STOP = 0.000
@@ -54,7 +54,7 @@ pwm3.enable()
 ##################################################################
 
 
-#reading OptiTrack information via Internet SETTING#############################################################
+#reading OptiTrack information via Internet SETTING #############################################################
 savet = (0.0,0.0,0.0)
 savet2 = (0.0,0.0,0.0)
 savepose = deque(maxlen=2)
@@ -217,7 +217,7 @@ def reading_positional_info():
     print("Angu speed",ax*180/np.pi,ay*180/np.pi,az*180/np.pi)# currently in optitrack coordinates
     print("speed",vel)# currently in optitrack coordinates
     print ("---------------------------------------------------------------------------------")
-    return pos, Euler, vel, Angu
+    return position, Euler, vel, Angu
 
 
 def quaternion2euler(q):
@@ -269,35 +269,52 @@ length of frame
 k relationship between thrust and pwms
 b the relationship between torque and summation of raotation speed
 '''
-'''
-m = 5   # MASS
-Ixx = 
-Iyy = 
-Izz = 
+
+# Simulation parameters
+g = 9.81
+m = 2.3 #kg
+L = 0.28 
+Ixx = 3.613e-2 
+Iyy = 3.613e-2 
+Izz = 6.707e-2 
 Inertia = np.array([[Ixx,0,0],[0,Iyy,0],[0,0,Izz]])
-L =   #LENGTH
-g = 9.8 # gravity
+T = 5 # time for complete trajectory
 
-#model coefficients
-k = 
-b =         
+# Model coefficients with Forces and Torques
+k = 3.876e-5
+b = 7.233e-7        
+gamma = b/k
 
-#PD control parameters
-K_p_phi = 
-K_p_theta = 
-K_p_psi = 
+# Motor coefficients
+wb = 144.37 # rad/s
+Cr = 615.1 # rad/s
 
-K_d_phi = 
-K_d_theta = 
-K_d_psi = 
+Max_PWM_Hz = 800
+Min_PWM_Hz = 571.4
 
-K_p_x = 
-K_p_y = 
-K_p_z = 
- 
-K_d_x = 
-K_d_y = 
-K_d_z = 
+pwm_thres = 1/SERVO_MIN * 0.9
+
+cof = 0.5*np.sqrt(2)
+Motor_mix = np.linalg.inv(np.array([[0.8,0.8,0.8,0.8],[-cof * L, cof * L, cof * L, -cof * L],
+                        [-cof * L, cof * L, -cof * L, cof * L],[gamma, gamma, -gamma, -gamma]]))
+
+#PD control parameters#######################################
+K_p_roll = 25
+K_p_pitch = 5
+K_p_psi = 25
+
+K_d_roll = 0.5 #0.1
+K_d_pitch = 0.5 #0.1
+K_d_psi = 0.5  # 0.1
+
+K_p_x = 1.5 #1
+K_p_y = 1.5 #1
+K_p_z = 0.8 #1
+
+K_d_x = 0.025 #0.01
+K_d_y = 0.025 #0.01
+K_d_z = 0.025 #0.01
+#############################################################
 
 K_p = np.array([[K_p_x,0,0],[0,K_p_y,0],[0,0,K_p_z]])
 K_d = np.array([[K_d_x,0,0],[0,K_d_y,0],[0,0,K_d_z]])
@@ -305,43 +322,54 @@ K_d = np.array([[K_d_x,0,0],[0,K_d_y,0],[0,0,K_d_z]])
 K_p_Pose = np.array([[K_p_phi,0,0],[0,K_p_theta,0],[0,0,K_p_psi]])
 K_d_Pose = np.array([[K_d_phi,0,0],[0,K_d_theta,0],[0,0,K_d_psi]])
 
+
 def position_control(desired_pos_info, pos, vel): #input should be generated trajectory
     #calculate errors of position, velocity and acceleration.
-    desired_pos, desired_vel, acc_desired, desired_psy = desired_pos_info
+    desired_pos, desired_vel, acc_desired, desired_yaw = desired_pos_info
     pos_error = desired_pos - pos
     vel_error = desired_vel - vel 
     #acc_desired come from derivative of trajectory
 
+    #Store position errors
+    pos_error_store.append(pos_error)
+    vel_error_store.append(vel_error)
+
     #calculate acc command
-    acc_command = acc_desired + K_d*vel_error + K_p*pos_error
+    acc_command = acc_desired + np.dot(K_d, vel_error.T) + np.dot(K_p, pos_error.T)
 
     #calculate the total thrust for 4 motors
     u1 = m*g + m*acc_command[2] # scalar i.e. summation of 4 thrust
 
-    # derive desired phi and desired pitch
-    desired_phi = 1/g * (acc_command[0] * sin(desired_psy) - acc_command[1] * cos(desired_psy))
-    desired_pitch = 1/g * (acc_command[0] * cos(desired_psy) - acc_command[1] * sin(desired_psy))
+    # derive desired roll and desired pitch
+    desired_roll = 1/g * (acc_command[0] * sin(desired_yaw) - acc_command[1] * cos(desired_yaw))
+    desired_pitch = 1/g * (acc_command[0] * cos(desired_yaw) - acc_command[1] * sin(desired_yaw))
 
-    desired_pose = np.array([desired_phi, desired_pitch, desired_psy])
+    desired_pose = np.array([desired_roll, desired_pitch, desired_yaw])
 
-    return u1, desired_pose
+    des_Euler_store.append(desired_pose)
+
+    return u1, desired_pose 
+
 
 def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler angle and angular rate and feedback pose info
     #specify desired Angular velocity
-    #Note for hover or near hover state, the desired angular velocity for phi and pitch should be 0
-    desired_phi_vel = 0
+    #Note for hover or near hover state, the desired angular velocity for roll and pitch should be 0
+    desired_roll_vel = 0
     desired_pitch_vel = 0
-    desired_psy_vel = 0 # angular velocity for yaw is not necessarily 0
-    desired_A_vel = np.array([desired_phi_vel, desired_pitch_vel, desired_psy_vel])    
+    desired_yaw_vel = 0 # angular velocity for yaw is not necessarily 0
+    desired_A_vel = np.array([desired_roll_vel, desired_pitch_vel, desired_yaw_vel])    
 
     #calculate errors of Euler angle and angular rate
     A_vel_error = desired_A_vel - A_vel
     Euler_error = desired_pose - Euler
 
-    #implement control for attitude
-    u2 = np.zeros((3,3))
-    u2 = Inertia * (K_p_Pose * Euler_error + K_d_Pose * A_vel_error)
+    #Store pose errors in lists.
+    Euler_error_store.append(Euler_error)
+    A_vel_error_store.append(A_vel_error)
 
+    #implement control for attitude
+    u2 = np.zeros(3)
+    u2 = np.dot(Inertia, (np.dot(K_p_Pose, Euler_error) + np.dot(K_d_Pose, A_vel_error)))
     return u2 
 
 
@@ -354,20 +382,20 @@ def motor_mix_controller(u1, u2):
     # the total thrust is F1 + F2 + F3 + F4
 
     # The transform matrix between [u1,u2] and [F1, F2, F3, F4] is :
-    cof = 0.5*np.sqrt(2)
-    Motor_mix = np.array([[1,1,1,1],[-cof * L, cof * L, cof * L, -cof * L],
-                        [-cof * L, cof * L, -cof * L, cof * L],[gamma, gamma, -gamma, -gamma]])
-
     # thrust for each motor is
     # the Force vector is force for each motor.
-    Force = np.dot(np.linalg.inv(Motor_mix), np.array([u1,u2[0],u2[1],u2[2]]))
+    Force = np.dot(Motor_mix, np.array([u1,u2[0],u2[1],u2[2]]))
 
     # transform force of each motor into rotation speed :
     omega = sqrt(1/k * Force)
 
+    # dutycycle and rotation speed
+    dutycycle = (omega - wb) / Cr
+
+    control_PWM = dutycycle * (Max_PWM_Hz - Min_PWM_Hz) + Min_PWM_Hz
+
     # transform rotation speed into PWM duty cycles : 
         # note that PWM duty cycles may need saturation.
-    control_PWM = k_pwm * omega
     for i in range(4):
         if control_PWM[i] > pwm_thres:
             control_PWM[i] = pwm_thres
@@ -381,134 +409,159 @@ def drive_motor(control_PWM):
     loop_for(0.01, pwm2.set_duty_cycle, control_PWM[2])
     loop_for(0.01, pwm3.set_duty_cycle, control_PWM[3])
 
-def main_control_loop():
-    # getting the desired position and yaw angle from trajectory planner: 
+def calculate_position(c, t):
+    """
+    Calculates a position given a set of quintic coefficients and a time.
+
+    Args
+        c: List of coefficients generated by a quintic polynomial 
+            trajectory generator.
+        t: Time at which to calculate the position
+
+    Returns
+        Position
+    """
+    return c[0] * t**5 + c[1] * t**4 + c[2] * t**3 + c[3] * t**2 + c[4] * t + c[5]
+
+
+def calculate_velocity(c, t):
+    """
+    Calculates a velocity given a set of quintic coefficients and a time.
+
+    Args
+        c: List of coefficients generated by a quintic polynomial 
+            trajectory generator.
+        t: Time at which to calculate the velocity
+
+    Returns
+        Velocity
+    """
+    return 5 * c[0] * t**4 + 4 * c[1] * t**3 + 3 * c[2] * t**2 + 2 * c[3] * t + c[4]
+
+
+def calculate_acceleration(c, t):
+    """
+    Calculates an acceleration given a set of quintic coefficients and a time.
+
+    Args
+        c: List of coefficients generated by a quintic polynomial 
+            trajectory generator.
+        t: Time at which to calculate the acceleration
+
+    Returns
+        Acceleration
+    """
+    return 20 * c[0] * t**3 + 12 * c[1] * t**2 + 6 * c[2] * t + 2 * c[3]
+
+
+
+
+def main_control_loop(x_c, y_c, z_c):
+    #getting the desired position and yaw angle from trajectory planner: 
     #desired_pos_info = traj_planner()
+    i = 0
+    n_run = 8
+    irun = 0
+    pos, Euler, vel, A_vel = reading_positional_info()
 
-    Loop = True 
-    count = 0
-    while Loop: 
-        # reading positional info from optitrack:
-        pos, Euler, vel, A_vel = reading_positional_info()
-        u1, desired_pos = position_control(desired_pos_info, pos, vel)
+    des_yaw = 0 # This just set for 0 temporarily
 
-        for i in range(5):
+    while True: # This is the loop for trajectory generation.
+        while t < T:
+            start_loop = time.clock()
+
+            des_x_pos = calculate_position(x_c[i], t)[0]
+            des_y_pos = calculate_position(y_c[i], t)[0]
+            des_z_pos = calculate_position(z_c[i], t)[0]
+            des_x_vel = calculate_velocity(x_c[i], t)[0]
+            des_y_vel = calculate_velocity(y_c[i], t)[0]
+            des_z_vel = calculate_velocity(z_c[i], t)[0]
+            des_x_acc = calculate_acceleration(x_c[i], t)[0]
+            des_y_acc = calculate_acceleration(y_c[i], t)[0]
+            des_z_acc = calculate_acceleration(z_c[i], t)[0]
+
+            #put the desired values into arrays
+            desired_pos = np.array ([des_x_pos, des_y_pos, des_z_pos])
+            desired_vel = np.array ([des_x_vel, des_y_vel, des_z_vel])
+            desired_acc = np.array ([des_x_acc, des_y_acc, des_z_acc])
+
+            #store the desired values
+            #des_pos_store.append(desired_pos)
+            #des_vel_store.append(desired_vel)
+
+            #stack the value in a list
+            desired_pos_info = []    
+            desired_pos_info.append(desired_pos)
+            desired_pos_info.append(desired_vel)
+            desired_pos_info.append(desired_acc)
+            desired_pos_info.append(des_yaw)
+
+            #put the pose values in array
+            #Euler = np.array([roll, pitch, yaw])
+            #A_vel = np.array([roll_vel, pitch_vel, yaw_vel])
+            #put the pos in array
+            #pos = np.array([x_pos, y_pos, z_pos])
+            #vel = np.array([x_vel, y_vel, z_vel])
+
+            # reading positional info from optitrack:
             pos, Euler, vel, A_vel = reading_positional_info()
-            u2 = attitude_control(Euler, A_vel, desired_pos)
-        control_PWM = motor_mix_controller(u1, u2)
-        drive_motor(control_PWM)
+            u1, desired_pos = position_control(desired_pos_info, pos, vel)
 
-def simulation():
-    start_time = 0
-    end_time = 10
-    dt = 0.005
+            for i in range(5):
+                pos, Euler, vel, A_vel = reading_positional_info()
+                u2 = attitude_control(Euler, A_vel, desired_pos)
+                control_PWM = motor_mix_controller(u1, u2)
+                drive_motor(control_PWM)
 
-    #initial simulation state
-    x = np.array([0,0,0])
-    x_dot = np.zeros(3)
-    theta = np.zeros(3)
+            t += time.clock() - start_loop
 
-    #Simulation some disturbance 
-
-
-    #Step through the simulation, updating the state
-    for i in range(start_time, end_time, dt):
-        #Take inputs from controllers
-        
-
-
-
-
-
-'''
-
-
-
-
-
-
-
-
-'''
-def main_control_loop(): 
-    pos,Euler,vel,A_vel = reading_positional_info()
-    # calculate errors
-    # assume they are numpy array
-    pos_error = desired_pos - pos
-    Euler_error = desired_Euler - Euler
-    vel_error = desired_vel - vel
-    A_vel_error = desired_A_vel - A_vel
-
-    # Assign PD parameters into diagnoal matrix
-    K_p_Pose = np.array([[K_p_phi,0,0],[0,K_p_theta,0],[0,0,K_p_psi]])
-    # PD law for orientation control
-    e_Pose = K_p_Pose * Euler_error + K_d_Pose * A_vel_error # matrix multiplication
-
-    common_term = m*g/(4*k*cos(Euler[1])*cos(Euler[0]))
-
-    gamma_1 = common_term - (2*b*e_Pose[0]*Ixx + e_Pose[2]*Izz*k*L)/(4*b*k*L)
-    gamma_2 = common_term + (e_Pose[2]*Izz)/(4*b) - (e_Pose[1]*Iyy)/(2*k*L)
-    gamma_3 = common_term - (-2*b*e_Pose[0]*Ixx + e_Pose[2]*Izz*k*L)/(4*b*k*L)
-    gamma_4 = common_term + e_Pose[2]*Izz/(4*b) + e_Pose[1]*Iyy/(2*k*L)
-
-    #assume linear relation between omega = k * pwm 
-
-    loop_for(0.01, pwm0.set_duty_cycle, period)
-    loop_for(0.01, pwm1.set_duty_cycle, period)
-    loop_for(0.01, pwm2.set_duty_cycle, period)
-    loop_for(0.01, pwm3.set_duty_cycle, period)
-'''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#Sample codes of Interaction through keyboards arrow button.#####################################################
-'''
-
-# get the curses screen window
-screen = curses.initscr()
-
-# turn off input echoing
-curses.noecho()
-
-# respond to keys immediately (don't wait for enter)
-curses.cbreak()
-
-# map arrow keys to special values
-screen.keypad(True)
-
-try:
-    while True:
-        char = screen.getch()
-        if char == ord('q'): 
+        t = 0
+        i = (i + 1) % 4
+        irun += 1
+        if irun >= n_run:
             break
-        elif char == curses.KEY_RIGHT:
-            # print doesn't work with curses, use addstr instead
-            screen.addstr(0, 0, 'right')
-        elif char == curses.KEY_LEFT:
-            screen.addstr(0, 0, 'left ')        
-        elif char == curses.KEY_UP:
-            screen.addstr(0, 0, 'up   ')        
-        elif char == curses.KEY_DOWN:
-            screen.addstr(0, 0, 'down ')
-finally:
-    # shut down cleanly
-    curses.nocbreak(); screen.keypad(0); curses.echo()
-    curses.endwin()
-'''
-##########################################################################################################
+
+    print("Done")
+
+
+def main():
+    """
+    Calculates the x, y, z coefficients for the four segments 
+    of the trajectory
+    """
+    """
+    x_coeffs = [[], [], [], []]
+    y_coeffs = [[], [], [], []]
+    z_coeffs = [[], [], [], []]
+    waypoints = [[-5, -5, 5], [5, -5, 5], [5, 5, 5], [-5, 5, 5]]
+
+    for i in range(4):
+        traj = TrajectoryGenerator(waypoints[i], waypoints[(i + 1) % 4], T)
+        traj.solve()
+        x_coeffs[i] = traj.x_c
+        y_coeffs[i] = traj.y_c
+        z_coeffs[i] = traj.z_c
+    """
+
+    pos, _, _, _ = reading_positional_info()
+    x_start = pos[0]
+    y_start = pos[0]
+    z_start = pos[0]
+
+    x_coeffs = [[], [], [], []]
+    y_coeffs = [[], [], [], []]
+    z_coeffs = [[], [], [], []]
+    waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start + 5], [x_start, y_start, z_start + 5], [x_start, y_start, z_start]]
+
+    for i in range(4):
+        traj = TrajectoryGenerator(waypoints[i], waypoints[(i + 1) % 4], T)
+        traj.solve()
+        x_coeffs[i] = traj.x_c
+        y_coeffs[i] = traj.y_c
+        z_coeffs[i] = traj.z_c
+
+    main_control_loop(x_coeffs, y_coeffs, z_coeffs)
+
+
+if __name__ == "__main__":
+    main()
