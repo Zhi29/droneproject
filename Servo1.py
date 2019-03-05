@@ -317,8 +317,8 @@ K_d_z = 0.025 #0.01
 K_p = np.array([[K_p_x,0,0],[0,K_p_y,0],[0,0,K_p_z]])
 K_d = np.array([[K_d_x,0,0],[0,K_d_y,0],[0,0,K_d_z]])
 
-K_p_Pose = np.array([[K_p_phi,0,0],[0,K_p_theta,0],[0,0,K_p_yaw]])
-K_d_Pose = np.array([[K_d_phi,0,0],[0,K_d_theta,0],[0,0,K_d_yaw]])
+K_p_Pose = np.array([[K_p_roll,0,0],[0,K_p_pitch,0],[0,0,K_p_yaw]])
+K_d_Pose = np.array([[K_d_roll,0,0],[0,K_d_pitch,0],[0,0,K_d_yaw]])
 
 
 def position_control(desired_pos_info, pos, vel): #input should be generated trajectory
