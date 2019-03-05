@@ -549,7 +549,6 @@ def main():
     main_control_loop(x_coeffs, y_coeffs, z_coeffs)
 
 def before_test():
-    wait_until_motor_is_ready()
     pos, Euler, vel, A_vel = reading_positional_info()
     print("pos", pos)
     print("Euler: ", Euler)
