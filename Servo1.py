@@ -386,6 +386,8 @@ def motor_mix_controller(u1, u2):
     # transform force of each motor into rotation speed :
     omega = np.sqrt(1/k * Force)
 
+    print("omega: ", omega)
+
     # dutycycle and rotation speed
     dutycycle = (omega - wb) / Cr
 
