@@ -371,6 +371,8 @@ def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler 
 
     #implement control for attitude
     u2 = np.zeros(3)
+    print("K_p_Pose * Euler_error", np.dot(K_p_Pose, Euler_error))
+    print("Inertia * K_p_Pose * Euler_error: ", np.dot(Inertia, (np.dot(K_p_Pose, Euler_error))))
     u2 = np.dot(Inertia, (np.dot(K_p_Pose, Euler_error) + np.dot(K_d_Pose, A_vel_error)))
     return u2 
 
