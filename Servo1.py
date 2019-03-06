@@ -384,15 +384,15 @@ def motor_mix_controller(u1, u2):
     # the Force vector is force for each motor.
     Force = np.dot(Motor_mix, np.array([u1,u2[0],u2[1],u2[2]]))
     Force = np.maximum(Force, m*g/4)
-    print("u1: ", u1)
-    print("u2: ", u2)
-    print("Motor_mix: ", Motor_mix)
+    #print("u1: ", u1)
+    #print("u2: ", u2)
+    #print("Motor_mix: ", Motor_mix)
     print("Force: ", Force)
 
     # transform force of each motor into rotation speed :
     omega = np.sqrt(1/k * Force)
 
-    print("omega: ", omega)
+    #print("omega: ", omega)
 
     # dutycycle and rotation speed
     dutycycle = (omega - wb) / Cr
