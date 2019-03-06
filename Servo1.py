@@ -197,7 +197,7 @@ def reading_positional_info():
 
     Rotation_mat=np.array([[1,0,0],[0,0,-1],[0,1,0]])
     print("original position: ", position)
-    position = np.dot(Rotation_mat, position)
+    position = np.dot(Rotation_mat.T, position)
     print("corrected position: ", position)
     #position[2] += 0.22
 
