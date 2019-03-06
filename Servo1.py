@@ -397,7 +397,7 @@ def motor_mix_controller(u1, u2):
     # dutycycle and rotation speed
     dutycycle = (omega - wb) / Cr
 
-    print("dutycycle: ", dutycycle)
+    #print("dutycycle: ", dutycycle)
 
     control_PWM = 1000/(dutycycle * (Max_PWM_Hz - Min_PWM_Hz) + Min_PWM_Hz)
 
