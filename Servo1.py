@@ -406,7 +406,8 @@ def motor_mix_controller(u1, u2):
 
     #print("dutycycle: ", dutycycle)
 
-    control_PWM = 1000/(dutycycle * (Max_PWM_Hz - Min_PWM_Hz) + Min_PWM_Hz)
+    #control_PWM = 1000/(dutycycle * (Max_PWM_Hz - Min_PWM_Hz) + Min_PWM_Hz)
+    control_PWM = dutycycle * 0.5 + 1.25
 
     # transform rotation speed into PWM duty cycles : 
         # note that PWM duty cycles may need saturation.
