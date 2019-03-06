@@ -363,7 +363,7 @@ def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler 
     A_vel_error = desired_A_vel - A_vel
     Euler_error = desired_pose - Euler
 
-    print("Euler_error: ", Euler_error)
+    print("Euler_error: ", Euler_error*180/np.pi)
 
     #Store pose errors in lists.
     Euler_error_store.append(Euler_error)
