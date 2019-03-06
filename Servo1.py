@@ -338,8 +338,8 @@ def position_control(desired_pos_info, pos, vel): #input should be generated tra
     u1 = m*g + m*acc_command[2] # scalar i.e. summation of 4 thrust
 
     # derive desired roll and desired pitch
-    desired_roll = 1/g * (acc_command[0] * sin(desired_yaw) - acc_command[1] * cos(desired_yaw))
-    desired_pitch = 1/g * (acc_command[0] * cos(desired_yaw) - acc_command[1] * sin(desired_yaw))
+    desired_roll = 1/g * (acc_command[0] * np.sin(desired_yaw) - acc_command[1] * np.cos(desired_yaw))
+    desired_pitch = 1/g * (acc_command[0] * np.cos(desired_yaw) - acc_command[1] * np.sin(desired_yaw))
 
     desired_pose = np.array([desired_roll, desired_pitch, desired_yaw])
 
