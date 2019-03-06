@@ -549,8 +549,8 @@ def main():
 
     pos, _, _, _ = reading_positional_info()
     x_start = pos[0]
-    y_start = pos[0]
-    z_start = pos[0]
+    y_start = pos[1]
+    z_start = pos[2]
 
     x_coeffs = [[], [], [], []]
     y_coeffs = [[], [], [], []]
