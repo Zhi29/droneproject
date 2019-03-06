@@ -368,7 +368,6 @@ def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler 
     #implement control for attitude
     u2 = np.zeros(3)
     u2 = np.dot(Inertia, (np.dot(K_p_Pose, Euler_error) + np.dot(K_d_Pose, A_vel_error)))
-    u2 = np.maximum(u2, 0)
     return u2 
 
 
@@ -384,6 +383,7 @@ def motor_mix_controller(u1, u2):
     # thrust for each motor is
     # the Force vector is force for each motor.
     Force = np.dot(Motor_mix, np.array([u1,u2[0],u2[1],u2[2]]))
+    Force = np.maximum(Force, 0)
     print("u1: ", u1)
     print("u2: ", u2)
     print("Motor_mix: ", Motor_mix)
