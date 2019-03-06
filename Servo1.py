@@ -201,6 +201,11 @@ def reading_positional_info():
     print("corrected position: ", position)
     #position[2] += 0.22
 
+    print("Enler angle: ", Euler)
+    Euler = np.dot(Rotation_mat.T, Euler)
+    print("Enler angle: ", Euler)
+
+
     savet = (contents[0],contents[1],contents[2])
     savepose.appendleft(savet)
     print(contents)
