@@ -177,7 +177,7 @@ def wait_until_motor_is_ready():
 
 def reading_positional_info():
     start = time.clock()
-    print('reading info.')
+    #print('reading info.')
     contents  =  recv_array(socket_sub,copy=False)
     position = contents[0:3]
     a = contents[3]
@@ -186,24 +186,24 @@ def reading_positional_info():
     d = contents[6]
     orientation = np.array([a,b,c,d])
     orientation[0] *= -1.0
-    print("orientation: ", orientation)
+    #print("orientation: ", orientation)
 
     Rotation_mat=np.array([[1,0,0],[0,0,-1],[0,1,0]])
     Euler = quaternion2euler(orientation)
     Euler = np.dot(Rotation_mat.T, Euler)
     savet2 = (Euler[0],Euler[1],Euler[2])
-    print("Angle180", Euler[0]*180/np.pi,Euler[1]*180/np.pi,Euler[2]*180/np.pi)
+    #print("Angle180", Euler[0]*180/np.pi,Euler[1]*180/np.pi,Euler[2]*180/np.pi)
 
     saveangu.appendleft(savet2)
 
     position = np.dot(Rotation_mat.T, position)
-    print("position:  ", position)
+    #print("position:  ", position)
 
     savet = (position[0],position[1],position[2])
     savepose.appendleft(savet)
 
     elapsed = (time.clock() - start)# record the time to calculate the velocities.
-    print("time",elapsed)
+    #print("time",elapsed)
     vx = (savepose[0][0] - savepose[-1][0])/elapsed*1.0
     vy = (savepose[0][1] - savepose[-1][1])/elapsed*1.0
     vz = (savepose[0][2] - savepose[-1][2])/elapsed*1.0
@@ -212,9 +212,9 @@ def reading_positional_info():
     ay = (saveangu[0][1] - saveangu[-1][1])/elapsed*1.0
     az = (saveangu[0][2] - saveangu[-1][2])/elapsed*1.0
     Angu = (ax,ay,az)
-    print("Angu speed",Angu)# currently in optitrack coordinates
-    print("Angu speed",ax*180/np.pi,ay*180/np.pi,az*180/np.pi)# currently in optitrack coordinates
-    print("speed",vel)# currently in optitrack coordinates
+    #print("Angu speed",Angu)# currently in optitrack coordinates
+    #print("Angu speed",ax*180/np.pi,ay*180/np.pi,az*180/np.pi)# currently in optitrack coordinates
+    #print("speed",vel)# currently in optitrack coordinates
     print ("---------------------------------------------------------------------------------")
     return position, Euler, vel, Angu
 
