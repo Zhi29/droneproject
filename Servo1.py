@@ -188,27 +188,19 @@ def reading_positional_info():
     orientation[0] *= -1.0
     print("orientation: ", orientation)
 
+    Rotation_mat=np.array([[1,0,0],[0,0,-1],[0,1,0]])
     Euler = quaternion2euler(orientation)
-    print("Enler angle: ", Euler)
+    Euler = np.dot(Rotation_mat.T, Euler)
     savet2 = (Euler[0],Euler[1],Euler[2])
     print("Angle180", Euler[0]*180/np.pi,Euler[1]*180/np.pi,Euler[2]*180/np.pi)
 
     saveangu.appendleft(savet2)
 
-    Rotation_mat=np.array([[1,0,0],[0,0,-1],[0,1,0]])
-    print("original position: ", position)
     position = np.dot(Rotation_mat.T, position)
-    print("corrected position: ", position)
-    #position[2] += 0.22
+    print("position:  ", position)
 
-    print("Enler angle: ", Euler)
-    Euler = np.dot(Rotation_mat.T, Euler)
-    print("Enler angle: ", Euler)
-
-
-    savet = (contents[0],contents[1],contents[2])
+    savet = (position[0],position[1],position[2])
     savepose.appendleft(savet)
-    print(contents)
 
     elapsed = (time.clock() - start)# record the time to calculate the velocities.
     print("time",elapsed)
