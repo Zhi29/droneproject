@@ -293,7 +293,7 @@ pwm_thres_max = SERVO_MAX
 pwm_thres_min = SERVO_MAX * 0.3
 
 cof = 0.5*np.sqrt(2)
-Motor_mix = np.linalg.inv(np.array([[0.8,0.8,0.8,0.8],[-cof * L, cof * L, cof * L, -cof * L],
+Motor_mix = np.linalg.inv(np.array([[1,1,1,1],[-cof * L, cof * L, cof * L, -cof * L],
                         [-cof * L, cof * L, -cof * L, cof * L],[gamma, gamma, -gamma, -gamma]]))
 
 Euler_error_store = []
