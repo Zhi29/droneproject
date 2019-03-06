@@ -464,6 +464,8 @@ def main_control_loop(x_c, y_c, z_c):
 
     des_yaw = 0 # This just set for 0 temporarily
 
+    t = 0
+
     while True: # This is the loop for trajectory generation.
         while t < T:
             start_loop = time.clock()
