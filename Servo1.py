@@ -195,9 +195,11 @@ def reading_positional_info():
 
     saveangu.appendleft(savet2)
 
-    Rotation_mat=np.dot(np.array([[0,0,1],[0,1,0],[-1,0,0]]),np.array([[0,1,0],[-1,0,0],[0,0,1.0]]))
+    Rotation_mat=np.array([[1,0,0],[0,0,-1],[0,1,0]])
+    print("original position: ", position)
     position = np.dot(Rotation_mat, position)
-    position[2] += 0.22
+    print("corrected position: ", position)
+    #position[2] += 0.22
 
     savet = (contents[0],contents[1],contents[2])
     savepose.appendleft(savet)
@@ -290,7 +292,7 @@ Cr = 615.1 # rad/s
 Max_PWM_Hz = 800  # Hz
 Min_PWM_Hz = 571.4 # Hz
 
-pwm_thres = 1/SERVO_MIN * 0.9
+pwm_thres = SERVO_MAX
 
 cof = 0.5*np.sqrt(2)
 Motor_mix = np.linalg.inv(np.array([[0.8,0.8,0.8,0.8],[-cof * L, cof * L, cof * L, -cof * L],
@@ -390,7 +392,7 @@ def motor_mix_controller(u1, u2):
     # dutycycle and rotation speed
     dutycycle = (omega - wb) / Cr
 
-    control_PWM = dutycycle * (Max_PWM_Hz - Min_PWM_Hz) + Min_PWM_Hz
+    control_PWM = 1000/(dutycycle * (Max_PWM_Hz - Min_PWM_Hz) + Min_PWM_Hz)
 
     # transform rotation speed into PWM duty cycles : 
         # note that PWM duty cycles may need saturation.
