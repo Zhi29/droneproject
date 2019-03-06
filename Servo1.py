@@ -387,7 +387,7 @@ def motor_mix_controller(u1, u2):
     #print("u1: ", u1)
     #print("u2: ", u2)
     #print("Motor_mix: ", Motor_mix)
-    print("Force: ", Force)
+    #print("Force: ", Force)
 
     # transform force of each motor into rotation speed :
     omega = np.sqrt(1/k * Force)
