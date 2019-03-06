@@ -289,7 +289,8 @@ Cr = 615.1 # rad/s
 Max_PWM_Hz = 800  # Hz
 Min_PWM_Hz = 571.4 # Hz
 
-pwm_thres = SERVO_MAX
+pwm_thres_max = SERVO_MAX
+pwm_thres_min = SERVO_MAX * 0.3
 
 cof = 0.5*np.sqrt(2)
 Motor_mix = np.linalg.inv(np.array([[0.8,0.8,0.8,0.8],[-cof * L, cof * L, cof * L, -cof * L],
@@ -367,6 +368,7 @@ def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler 
     #implement control for attitude
     u2 = np.zeros(3)
     u2 = np.dot(Inertia, (np.dot(K_p_Pose, Euler_error) + np.dot(K_d_Pose, A_vel_error)))
+    np.maximum(u2, 0)
     return u2 
 
 
@@ -402,8 +404,10 @@ def motor_mix_controller(u1, u2):
     # transform rotation speed into PWM duty cycles : 
         # note that PWM duty cycles may need saturation.
     for i in range(4):
-        if control_PWM[i] > pwm_thres:
-            control_PWM[i] = pwm_thres
+        if control_PWM[i] > pwm_thres_max:
+            control_PWM[i] = pwm_thres_max
+        elif control_PWM[i] < pwm_thres_min:
+            control_PWM[i] = pwm_thres_min
     print("control_PWM", control_PWM)
 
     return control_PWM
