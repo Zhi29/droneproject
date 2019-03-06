@@ -195,7 +195,7 @@ def reading_positional_info():
 
     saveangu.appendleft(savet2)
 
-    Rotation_mat=np.array([[1,0,0],[0,0,1],[0,-1,0]])
+    Rotation_mat=np.array([[1,0,0],[0,0,-1],[0,1,0]])
     print("original position: ", position)
     position = np.dot(Rotation_mat, position)
     print("corrected position: ", position)
