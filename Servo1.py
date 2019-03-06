@@ -296,6 +296,8 @@ cof = 0.5*np.sqrt(2)
 Motor_mix = np.linalg.inv(np.array([[0.8,0.8,0.8,0.8],[-cof * L, cof * L, cof * L, -cof * L],
                         [-cof * L, cof * L, -cof * L, cof * L],[gamma, gamma, -gamma, -gamma]]))
 
+Euler_error_store = []
+
 #PD control parameters#######################################
 K_p_roll = 25
 K_p_pitch = 5
@@ -361,8 +363,10 @@ def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler 
     A_vel_error = desired_A_vel - A_vel
     Euler_error = desired_pose - Euler
 
+    print("Euler_error: ", Euler_error)
+
     #Store pose errors in lists.
-    #Euler_error_store.append(Euler_error)
+    Euler_error_store.append(Euler_error)
     #A_vel_error_store.append(A_vel_error)
 
     #implement control for attitude
