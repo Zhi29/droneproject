@@ -328,8 +328,8 @@ def position_control(desired_pos_info, pos, vel): #input should be generated tra
     #acc_desired come from derivative of trajectory
 
     #Store position errors
-    pos_error_store.append(pos_error)
-    vel_error_store.append(vel_error)
+    #pos_error_store.append(pos_error)
+    #vel_error_store.append(vel_error)
 
     #calculate acc command
     acc_command = acc_desired + np.dot(K_d, vel_error.T) + np.dot(K_p, pos_error.T)
@@ -343,7 +343,7 @@ def position_control(desired_pos_info, pos, vel): #input should be generated tra
 
     desired_pose = np.array([desired_roll, desired_pitch, desired_yaw])
 
-    des_Euler_store.append(desired_pose)
+    #des_Euler_store.append(desired_pose)
 
     return u1, desired_pose 
 
@@ -361,8 +361,8 @@ def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler 
     Euler_error = desired_pose - Euler
 
     #Store pose errors in lists.
-    Euler_error_store.append(Euler_error)
-    A_vel_error_store.append(A_vel_error)
+    #Euler_error_store.append(Euler_error)
+    #A_vel_error_store.append(A_vel_error)
 
     #implement control for attitude
     u2 = np.zeros(3)
@@ -529,7 +529,7 @@ def main():
     Calculates the x, y, z coefficients for the four segments 
     of the trajectory
     """
-    wait_until_motor_is_ready()
+    #wait_until_motor_is_ready()
 
     pos, _, _, _ = reading_positional_info()
     x_start = pos[0]
