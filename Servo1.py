@@ -271,9 +271,9 @@ b the relationship between torque and summation of raotation speed
 g = 9.81
 m = 2.3 #kg
 L = 0.28 # m 
-Ixx = 3.613e-2 
-Iyy = 3.613e-2 
-Izz = 6.707e-2 
+Ixx = 3.613e2 
+Iyy = 3.613e2 
+Izz = 6.707e2 
 Inertia = np.array([[Ixx,0,0],[0,Iyy,0],[0,0,Izz]])
 T = 5 # time for complete trajectory
 
