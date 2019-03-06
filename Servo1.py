@@ -396,6 +396,7 @@ def motor_mix_controller(u1, u2):
     for i in range(4):
         if control_PWM[i] > pwm_thres:
             control_PWM[i] = pwm_thres
+    print("control_PWM", control_PWM)
 
     return control_PWM
 
@@ -536,7 +537,7 @@ def main():
     x_coeffs = [[], [], [], []]
     y_coeffs = [[], [], [], []]
     z_coeffs = [[], [], [], []]
-    waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start + 5], [x_start, y_start, z_start + 5], [x_start, y_start, z_start]]
+    waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start - 0.2], [x_start, y_start, z_start - 0.2], [x_start, y_start, z_start]]
 
     for i in range(4):
         traj = TrajectoryGenerator(waypoints[i], waypoints[(i + 1) % 4], T)
@@ -556,5 +557,4 @@ def before_test():
 
 
 if __name__ == "__main__":
-    while True:
-        before_test()
+    main()
