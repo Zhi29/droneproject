@@ -578,10 +578,10 @@ def main():
     """
     #calibration_ESC()
     wait_until_motor_is_ready()
-    loop_for(0.01, pwm0.set_duty_cycle, SERVO_MIN)
-    loop_for(0.01, pwm1.set_duty_cycle, SERVO_MIN)
-    loop_for(0.01, pwm2.set_duty_cycle, SERVO_MIN)
-    loop_for(0.01, pwm3.set_duty_cycle, SERVO_MIN)
+    loop_for(0.1, pwm0.set_duty_cycle, SERVO_MIN)
+    loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
+    loop_for(0.1, pwm2.set_duty_cycle, SERVO_MIN)
+    loop_for(0.1, pwm3.set_duty_cycle, SERVO_MIN)
 
     pos, _, _, _ = reading_positional_info()
     x_start = pos[0]
