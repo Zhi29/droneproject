@@ -296,9 +296,6 @@ cof = 0.5*np.sqrt(2)
 #Motor_mix = np.linalg.inv(np.array([[1,1,1,1],[-cof * L, cof * L, cof * L, -cof * L],
 #                        [-cof * L, cof * L, -cof * L, cof * L],[gamma, gamma, -gamma, -gamma]]))
 
-Motor_mix = np.linalg.inv(np.array([[1,1,1,1],[-cof * L, cof * L, cof * L, -cof * L],
-                        [cof * L, -cof * L, cof * L, -cof * L],[gamma, gamma, -gamma, -gamma]]))
-
 
 Euler_error_store = []
 
@@ -393,7 +390,27 @@ def motor_mix_controller(u1, u2):
     # The transform matrix between [u1,u2] and [F1, F2, F3, F4] is :
     # thrust for each motor is
     # the Force vector is force for each motor.
-    Force = np.dot(Motor_mix, np.array([u1,u2[0],u2[1],u2[2]]))
+    roll_torque, pitch_torque, yaw_torque = u2
+
+    if roll_torque >= 0:
+        motor_mix_roll = np.array([-cof * L, cof * L, cof * L, -cof * L])
+    elif roll_torque < 0: 
+        motor_mix_roll = np.array([cof * L, -cof * L, -cof * L, cof * L])
+
+    if pitch_torque >= 0:
+        motor_mix_pitch = np.array([cof * L, -cof * L, cof * L, -cof * L])
+    elif pitch_torque < 0:
+        motor_mix_pitch = np.array([-cof * L, cof * L, -cof * L, cof * L])
+
+    if yaw_torque >= 0:
+        motor_mix_yaw = np.array([gamma, gamma, -gamma, -gamma])
+    elif yaw_torque <0:
+        motor_mix_yaw = np.array([-gamma, -gamma, gamma, gamma])
+
+    Motor_mix = np.linalg.inv(np.array([[0.8, 0.8, 0.8, 0.8], motor_mix_roll,
+                                        motor_mix_pitch, motor_mix_yaw]))
+
+    Force = np.dot(Motor_mix, np.array([u1,np.abs(u2[0]),np.abs(u2[1]),np.abs(u2[2])]))
     #Force = np.maximum(Force, m*g/10)
     print("u1: ", u1)
     print("u2: ", u2)
@@ -410,8 +427,8 @@ def motor_mix_controller(u1, u2):
 
     #print("dutycycle: ", dutycycle)
 
-    #control_PWM = 1000/(dutycycle * (Max_PWM_Hz - Min_PWM_Hz) + Min_PWM_Hz)
-    control_PWM = dutycycle * 0.5 + 1.25
+     #control_PWM = 1000/(dutycycle * (Max_PWM_Hz - Min_PWM_Hz) + Min_PWM_Hz)
+    control_PWM = dutycycle * (SERVO_MAX - SERVO_MIN) + SERVO_MIN
 
     # transform rotation speed into PWM duty cycles : 
         # note that PWM duty cycles may need saturation.
