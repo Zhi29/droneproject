@@ -278,7 +278,7 @@ Inertia = np.array([[Ixx,0,0],[0,Iyy,0],[0,0,Izz]])
 T = 5 # time for complete trajectory
 
 # Model coefficients with Forces and Torques
-k = 3.876e-5
+k = 1e-4#3.876e-5
 b = 7.233e-7        
 gamma = b/k
 
