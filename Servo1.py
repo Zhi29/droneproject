@@ -302,7 +302,7 @@ cof = 0.5*np.sqrt(2)
 
 Euler_error_store = []
 
-store_PWM = []
+store_PWM = np.zeros(4)
 
 #PD control parameters#######################################
 K_p_roll = 5
@@ -564,7 +564,7 @@ def main_control_loop(x_c, y_c, z_c):
                 u2 = attitude_control(Euler, A_vel, desired_pos)
                 control_PWM = motor_mix_controller(u1, u2)
                 drive_motor(control_PWM)
-                store_PWM.append(control_PWM)
+                store_PWM = np.vstack(store_PWM, control_PWM)
 
             t += time.clock() - start_loop
 
@@ -607,7 +607,8 @@ def main():
         z_coeffs[i] = traj.z_c
 
     main_control_loop(x_coeffs, y_coeffs, z_coeffs)
-    visulization()
+    np.save("store_PWM.npy", store_PWM)
+    #visulization()
 
 def before_test():
     pos, Euler, vel, A_vel = reading_positional_info()
