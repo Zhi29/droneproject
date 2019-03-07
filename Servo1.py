@@ -576,8 +576,8 @@ def main():
     Calculates the x, y, z coefficients for the four segments 
     of the trajectory
     """
-    #calibration_ESC()
-    #wait_until_motor_is_ready()
+    calibration_ESC()
+    wait_until_motor_is_ready()
 
     pos, _, _, _ = reading_positional_info()
     x_start = pos[0]
