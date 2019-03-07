@@ -299,6 +299,8 @@ cof = 0.5*np.sqrt(2)
 
 Euler_error_store = []
 
+store_PWM = []
+
 #PD control parameters#######################################
 K_p_roll = 5
 K_p_pitch = 5
@@ -559,6 +561,7 @@ def main_control_loop(x_c, y_c, z_c):
                 u2 = attitude_control(Euler, A_vel, desired_pos)
                 control_PWM = motor_mix_controller(u1, u2)
                 drive_motor(control_PWM)
+                store_PWM.append(control_PWM)
 
             t += time.clock() - start_loop
 
@@ -601,6 +604,7 @@ def main():
         z_coeffs[i] = traj.z_c
 
     main_control_loop(x_coeffs, y_coeffs, z_coeffs)
+    visulization()
 
 def before_test():
     pos, Euler, vel, A_vel = reading_positional_info()
@@ -609,6 +613,14 @@ def before_test():
     print("vel", vel)
     print("A-vel", A_vel)
 
+def visulization():
+    plt.figure()
+    plt.title("pos_store")
+    plt.plot(np.arange(len(store_PWM)), store_PWM,linewidth = '1')
+    #plt.subplot(2,2,2)
+    #plt.title("vel_store")
+    #plt.plot(np.arange(len(vel_store)), vel_store,linewidth = '1')
+    
 
 if __name__ == "__main__":
     main()
