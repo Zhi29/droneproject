@@ -278,8 +278,8 @@ Inertia = np.array([[Ixx,0,0],[0,Iyy,0],[0,0,Izz]])
 T = 5 # time for complete trajectory
 
 # Model coefficients with Forces and Torques
-k = 1#3.876e-5
-b = 0.1#7.233e-7        
+k = 3.876e-5
+b = 7.233e-7        
 gamma = b/k
 
 # Motor coefficients
@@ -407,7 +407,7 @@ def motor_mix_controller(u1, u2):
     elif yaw_torque >= 0:
         motor_mix_yaw = np.array([-gamma, -gamma, gamma, gamma])
 
-    Motor_mix = np.linalg.inv(np.array([[0.8, 0.8, 0.8, 0.8], motor_mix_roll,
+    Motor_mix = np.linalg.inv(np.array([[1,1,1,1], motor_mix_roll,
                                         motor_mix_pitch, motor_mix_yaw]))
 
     Force = np.dot(Motor_mix, np.array([u1,np.abs(u2[0]),np.abs(u2[1]),np.abs(u2[2])]))
