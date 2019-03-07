@@ -445,7 +445,8 @@ def drive_motor(control_PWM):
     # this function is mainly used to pass duty cycle into navio hardware to drive motor.
     print("I am in")
     #control_PWM = np.int0(control_PWM*1000)/1000.0
-    control_PWM = ("%.3f" % control_PWM)
+    for k in range(4):
+        control_PWM[k] = ("%.3f" % control_PWM[k])
     print(control_PWM)
     loop_for(0.001, pwm0.set_duty_cycle, control_PWM[0])
     loop_for(0.001, pwm1.set_duty_cycle, control_PWM[1])
