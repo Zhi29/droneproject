@@ -26,8 +26,8 @@ PWM_OUTPUT_0  = 0
 PWM_OUTPUT_1  = 1
 PWM_OUTPUT_2  = 2
 PWM_OUTPUT_3  = 3
-SERVO_MIN = 1.250 #1.072 #ms
-SERVO_MAX = 1.750 #1.935 #ms  571.4 - 800 
+SERVO_MIN = 1.072 #ms
+SERVO_MAX = 1.935 #ms  571.4 - 800 
 SERVO_NOM = 1.500 #ms
 SERVO_NOM_1 = 1.350
 SERVO_STOP = 0.000
@@ -570,7 +570,7 @@ def main():
     Calculates the x, y, z coefficients for the four segments 
     of the trajectory
     """
-    #calibration_ESC()
+    calibration_ESC()
     wait_until_motor_is_ready()
 
     pos, _, _, _ = reading_positional_info()
