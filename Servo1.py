@@ -278,7 +278,7 @@ Ixx = 3.613e-2
 Iyy = 3.613e-2 
 Izz = 6.707e-2 
 Inertia = np.array([[Ixx,0,0],[0,Iyy,0],[0,0,Izz]])
-T = 5 # time for complete trajectory
+T = 2 # time for complete trajectory
 
 # Model coefficients with Forces and Torques
 k = 3.876e-5
@@ -623,6 +623,7 @@ def visulization():
     #plt.subplot(2,2,2)
     #plt.title("vel_store")
     #plt.plot(np.arange(len(vel_store)), vel_store,linewidth = '1')
+    plt.show()
     
 
 if __name__ == "__main__":
