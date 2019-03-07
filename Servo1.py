@@ -172,7 +172,7 @@ def wait_until_motor_is_ready():
     loop_for(0.01, pwm2.set_duty_cycle, SERVO_MIN)
     loop_for(0.01, pwm3.set_duty_cycle, SERVO_MIN)
 
-    time.sleep(8)
+    time.sleep(5)
 
 
 def reading_positional_info():
@@ -576,8 +576,12 @@ def main():
     Calculates the x, y, z coefficients for the four segments 
     of the trajectory
     """
-    calibration_ESC()
+    #calibration_ESC()
     wait_until_motor_is_ready()
+    loop_for(0.01, pwm0.set_duty_cycle, SERVO_MIN)
+    loop_for(0.01, pwm1.set_duty_cycle, SERVO_MIN)
+    loop_for(0.01, pwm2.set_duty_cycle, SERVO_MIN)
+    loop_for(0.01, pwm3.set_duty_cycle, SERVO_MIN)
 
     pos, _, _, _ = reading_positional_info()
     x_start = pos[0]
