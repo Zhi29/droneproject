@@ -444,6 +444,7 @@ def motor_mix_controller(u1, u2):
 def drive_motor(control_PWM):
     # this function is mainly used to pass duty cycle into navio hardware to drive motor.
     print("I am in")
+    print(control_PWM)
     loop_for(0.001, pwm0.set_duty_cycle, control_PWM[0])
     loop_for(0.001, pwm1.set_duty_cycle, control_PWM[1])
     loop_for(0.001, pwm2.set_duty_cycle, control_PWM[2])
