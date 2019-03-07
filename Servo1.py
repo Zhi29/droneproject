@@ -601,4 +601,4 @@ def before_test():
 
 
 if __name__ == "__main__":
-    main()
+    test_throttle_via_RC()
