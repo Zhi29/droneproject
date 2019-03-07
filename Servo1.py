@@ -617,8 +617,7 @@ def before_test():
     print("A-vel", A_vel)
 
 def visulization():
-    plt.figure()
-    plt.subplot(1,1,1)
+    plt.figure(1)
     plt.title("pos_store")
     plt.plot(np.arange(len(store_PWM)), store_PWM,linewidth = '1')
     #plt.subplot(2,2,2)
