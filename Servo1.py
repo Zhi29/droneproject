@@ -392,19 +392,19 @@ def motor_mix_controller(u1, u2):
     # the Force vector is force for each motor.
     roll_torque, pitch_torque, yaw_torque = u2
 
-    if roll_torque >= 0:
+    if roll_torque < 0:
         motor_mix_roll = np.array([-cof * L, cof * L, cof * L, -cof * L])
-    elif roll_torque < 0: 
+    elif roll_torque >= 0: 
         motor_mix_roll = np.array([cof * L, -cof * L, -cof * L, cof * L])
 
-    if pitch_torque >= 0:
+    if pitch_torque < 0:
         motor_mix_pitch = np.array([cof * L, -cof * L, cof * L, -cof * L])
-    elif pitch_torque < 0:
+    elif pitch_torque >= 0:
         motor_mix_pitch = np.array([-cof * L, cof * L, -cof * L, cof * L])
 
-    if yaw_torque >= 0:
+    if yaw_torque < 0:
         motor_mix_yaw = np.array([gamma, gamma, -gamma, -gamma])
-    elif yaw_torque <0:
+    elif yaw_torque >= 0:
         motor_mix_yaw = np.array([-gamma, -gamma, gamma, gamma])
 
     Motor_mix = np.linalg.inv(np.array([[0.8, 0.8, 0.8, 0.8], motor_mix_roll,
