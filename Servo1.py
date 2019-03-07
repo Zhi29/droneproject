@@ -300,8 +300,8 @@ cof = 0.5*np.sqrt(2)
 Euler_error_store = []
 
 #PD control parameters#######################################
-K_p_roll = 25
-K_p_pitch = 25
+K_p_roll = 5
+K_p_pitch = 5
 K_p_yaw = 5
 
 K_d_roll = 0.5 #0.1
