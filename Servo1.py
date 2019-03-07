@@ -16,6 +16,9 @@ import json
 
 from TrajectoryGenerator import TrajectoryGenerator
 
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
 navio.util.check_apm()
 
 
