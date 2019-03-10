@@ -302,7 +302,7 @@ cof = 0.5*np.sqrt(2)
 
 Euler_error_store = []
 
-store_PWM = np.array([])
+global store_PWM #= np.array([])
 
 #PD control parameters#######################################
 K_p_roll = 5
