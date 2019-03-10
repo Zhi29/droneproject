@@ -574,9 +574,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM):
         irun += 1
         if irun >= n_run:
             break
-
-    return store_PWM
-
+    np.save("store_PWM.npy", store_PWM)
     print("Done")
 
 
@@ -610,8 +608,8 @@ def main():
         z_coeffs[i] = traj.z_c
 
     store_PWM = np.zeros(4)
-    store_PWM = main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM)
-    np.save("store_PWM.npy", store_PWM)
+    main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM)
+    
     #visulization()
 
 def before_test():
