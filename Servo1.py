@@ -506,7 +506,7 @@ def calculate_acceleration(c, t):
 
 
 
-def main_control_loop(x_c, y_c, z_c):
+def main_control_loop(x_c, y_c, z_c, store_PWM):
     #getting the desired position and yaw angle from trajectory planner: 
     #desired_pos_info = traj_planner()
     i = 0
@@ -517,7 +517,7 @@ def main_control_loop(x_c, y_c, z_c):
     des_yaw = 0 # This just set for 0 temporarily
 
     t = 0
-    store_PWM = np.zeros(4)
+    
 
     while True: # This is the loop for trajectory generation.
         while t < T:
@@ -607,7 +607,8 @@ def main():
         y_coeffs[i] = traj.y_c
         z_coeffs[i] = traj.z_c
 
-    main_control_loop(x_coeffs, y_coeffs, z_coeffs)
+    store_PWM = np.zeros(4)
+    main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM)
     np.save("store_PWM.npy", store_PWM)
     #visulization()
 
