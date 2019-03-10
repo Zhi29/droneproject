@@ -155,6 +155,15 @@ def test_throttle():
     loop_for(0.1, pwm2.set_duty_cycle, SERVO_MIN)
     loop_for(0.1, pwm3.set_duty_cycle, SERVO_MIN)
 
+def test_motor():
+    wait_until_motor_is_ready()
+    while True:
+        loop_for(0.001, pwm0.set_duty_cycle, 1.420)
+        loop_for(0.001, pwm1.set_duty_cycle, 1.380)
+        loop_for(0.001, pwm2.set_duty_cycle, 1.420)
+        loop_for(0.001, pwm3.set_duty_cycle, 1.380)
+
+
 def test_throttle_via_RC():
     wait_until_motor_is_ready()
     Loop = True
@@ -630,4 +639,4 @@ def visulization():
     
 
 if __name__ == "__main__":
-    main()
+    test_motor()
