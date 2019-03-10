@@ -302,7 +302,7 @@ cof = 0.5*np.sqrt(2)
 
 Euler_error_store = []
 
-store_PWM = np.zeros(4)
+store_PWM = np.array([])
 
 #PD control parameters#######################################
 K_p_roll = 5
@@ -583,7 +583,7 @@ def main():
     of the trajectory
     """
     #calibration_ESC()
-    wait_until_motor_is_ready()
+    #wait_until_motor_is_ready()
     loop_for(0.1, pwm0.set_duty_cycle, SERVO_MIN)
     loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
     loop_for(0.1, pwm2.set_duty_cycle, SERVO_MIN)
