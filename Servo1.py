@@ -302,7 +302,7 @@ cof = 0.5*np.sqrt(2)
 
 Euler_error_store = []
 
-global store_PWM #= np.array([])
+
 
 #PD control parameters#######################################
 K_p_roll = 5
@@ -517,6 +517,7 @@ def main_control_loop(x_c, y_c, z_c):
     des_yaw = 0 # This just set for 0 temporarily
 
     t = 0
+    store_PWM = np.zeros(4)
 
     while True: # This is the loop for trajectory generation.
         while t < T:
