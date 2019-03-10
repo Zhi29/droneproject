@@ -281,11 +281,11 @@ b the relationship between torque and summation of raotation speed
 
 # Simulation parameters
 g = 9.81
-m = 2.3 #kg
+m = 2.0 #kg
 L = 0.28 # m 
-Ixx = 3.613e-2 
-Iyy = 3.613e-2 
-Izz = 6.707e-2 
+Ixx = 3.503e-2#3.613e-2 
+Iyy = 3.503e-2#3.613e-2 
+Izz = 6.658e-2#6.707e-2 
 Inertia = np.array([[Ixx,0,0],[0,Iyy,0],[0,0,Izz]])
 T = 5 # time for complete trajectory
 
@@ -295,8 +295,8 @@ b = 7.233e-7
 gamma = b/k
 
 # Motor coefficients
-wb = 144.37 # rad/s
-Cr = 615.1 # rad/s
+wb = 137.74#144.37 # rad/s
+Cr = 615.69#615.1 # rad/s
 
 Max_PWM_Hz = 800  # Hz
 Min_PWM_Hz = 571.4 # Hz
@@ -639,5 +639,4 @@ def visulization():
     
 
 if __name__ == "__main__":
-    calibration_ESC()
-    test_motor()
+    main()
