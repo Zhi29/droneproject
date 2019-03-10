@@ -565,7 +565,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM):
                 u2 = attitude_control(Euler, A_vel, desired_pos)
                 control_PWM = motor_mix_controller(u1, u2)
                 drive_motor(control_PWM)
-                store_PWM = np.vstack(control_PWM)
+                store_PWM = np.vstack((store_PWM,control_PWM))
 
             t += time.clock() - start_loop
 
