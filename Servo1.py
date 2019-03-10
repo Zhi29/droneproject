@@ -639,4 +639,5 @@ def visulization():
     
 
 if __name__ == "__main__":
+    calibration_ESC()
     test_motor()
