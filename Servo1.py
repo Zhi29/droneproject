@@ -158,8 +158,8 @@ def test_throttle():
 def test_motor():
     wait_until_motor_is_ready()
     while True:
-        loop_for(0.1, pwm0.set_duty_cycle, 1.420)
-        loop_for(0.1, pwm0.set_duty_cycle, 1.380)
+        loop_for(1, pwm0.set_duty_cycle, 1.420)
+        loop_for(1, pwm0.set_duty_cycle, 1.380)
 
 
 
