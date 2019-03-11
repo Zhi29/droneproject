@@ -324,7 +324,7 @@ K_d_yaw = 0.5  # 0.1
 
 K_p_x = 1.5 #1
 K_p_y = 1.5 #1
-K_p_z = 0.8 #1
+K_p_z = 15 #1
 
 K_d_x = 0.025 #0.01
 K_d_y = 0.025 #0.01
@@ -344,7 +344,7 @@ def position_control(desired_pos_info, pos, vel): #input should be generated tra
     pos_error = desired_pos - pos
     vel_error = desired_vel - vel 
     #acc_desired come from derivative of trajectory
-
+    
     #Store position errors
     #pos_error_store.append(pos_error)
     #vel_error_store.append(vel_error)
