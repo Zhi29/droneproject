@@ -344,7 +344,7 @@ def position_control(desired_pos_info, pos, vel): #input should be generated tra
     pos_error = desired_pos - pos
     vel_error = desired_vel - vel 
     #acc_desired come from derivative of trajectory
-    
+
     #Store position errors
     #pos_error_store.append(pos_error)
     #vel_error_store.append(vel_error)
@@ -363,7 +363,7 @@ def position_control(desired_pos_info, pos, vel): #input should be generated tra
 
     #des_Euler_store.append(desired_pose)
 
-    return u1, desired_pose 
+    return u1, desired_pose, pos_error 
 
 
 def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler angle and angular rate and feedback pose info
@@ -390,7 +390,7 @@ def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler 
     #print("K_p_Pose * Euler_error", np.dot(K_p_Pose, Euler_error))
     #print("Inertia * K_p_Pose * Euler_error: ", np.dot(Inertia, (np.dot(K_p_Pose, Euler_error))))
     u2 = np.dot(Inertia, (np.dot(K_p_Pose, Euler_error) + np.dot(K_d_Pose, A_vel_error)))
-    return u2 
+    return u2, Euler_error
 
 
 def motor_mix_controller(u1, u2):
@@ -427,10 +427,10 @@ def motor_mix_controller(u1, u2):
 
     Force = np.dot(Motor_mix, np.array([u1,np.abs(u2[0]),np.abs(u2[1]),np.abs(u2[2])]))
     #Force = np.maximum(Force, m*g/10)
-    print("u1: ", u1)
-    print("u2: ", u2)
+    #print("u1: ", u1)
+    #print("u2: ", u2)
     #print("Motor_mix: ", Motor_mix)
-    print("Force: ", Force)
+    #print("Force: ", Force)
 
     # transform force of each motor into rotation speed :
     omega = np.sqrt(1/k * Force)
@@ -452,7 +452,7 @@ def motor_mix_controller(u1, u2):
             control_PWM[i] = pwm_thres_max
         elif control_PWM[i] < pwm_thres_min:
             control_PWM[i] = pwm_thres_min
-    print("control_PWM", control_PWM)
+    #print("control_PWM", control_PWM)
 
     return control_PWM
 
@@ -568,14 +568,19 @@ def main_control_loop(x_c, y_c, z_c, store_PWM):
 
             # reading positional info from optitrack:
             pos, Euler, vel, A_vel = reading_positional_info()
-            u1, desired_pos = position_control(desired_pos_info, pos, vel)
+            u1, desired_pos, pos_error = position_control(desired_pos_info, pos, vel)
 
             for ii in range(5):
                 pos, Euler, vel, A_vel = reading_positional_info()
-                u2 = attitude_control(Euler, A_vel, desired_pos)
+                u2, Euler_error = attitude_control(Euler, A_vel, desired_pos)
                 control_PWM = motor_mix_controller(u1, u2)
                 drive_motor(control_PWM)
                 store_PWM = np.vstack((store_PWM,control_PWM))
+                np.save("store_PWM.npy", store_PWM)
+                store_Euler = np.vstack((store_Euler,Euler_error))
+                np.save("store_Euler.npy", store_Euler)
+            store_pos = np.vstack((store_pos,pos_error))
+            np.save("store_pos.npy", store_pos)
 
             t += time.clock() - start_loop
 
@@ -584,7 +589,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM):
         irun += 1
         if irun >= n_run:
             break
-    np.save("store_PWM.npy", store_PWM)
+    
     print("Done")
 
 
@@ -618,7 +623,9 @@ def main():
         z_coeffs[i] = traj.z_c
 
     store_PWM = np.zeros(4)
-    main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM)
+    store_Euler = np.zeros(3)
+    store_pos = np.zeros(3)
+    main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM, store_Euler, store_pos)
     
     #visulization()
 
