@@ -593,7 +593,7 @@ def main():
     Calculates the x, y, z coefficients for the four segments 
     of the trajectory
     """
-    #calibration_ESC()
+    calibration_ESC()
     wait_until_motor_is_ready()
     loop_for(0.5, pwm0.set_duty_cycle, SERVO_MIN)
     loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
