@@ -314,8 +314,8 @@ Euler_error_store = []
 
 
 #PD control parameters#######################################
-K_p_roll = 25
-K_p_pitch = 25
+K_p_roll = 250
+K_p_pitch = 250
 K_p_yaw = 5
 
 K_d_roll = 0.5 #0.1
@@ -592,7 +592,7 @@ def main():
     Calculates the x, y, z coefficients for the four segments 
     of the trajectory
     """
-    calibration_ESC()
+    #calibration_ESC()
     wait_until_motor_is_ready()
     loop_for(0.5, pwm0.set_duty_cycle, SERVO_MIN)
     loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
