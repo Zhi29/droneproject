@@ -378,8 +378,8 @@ def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler 
     A_vel_error = desired_A_vel - A_vel
     Euler_error = desired_pose - Euler
 
-    print("Euler_error: ", Euler_error*180/np.pi)
-    print("Euler_error: ", Euler_error)
+    #print("Euler_error: ", Euler_error*180/np.pi)
+    #print("Euler_error: ", Euler_error)
 
     #Store pose errors in lists.
     Euler_error_store.append(Euler_error)
@@ -462,7 +462,7 @@ def drive_motor(control_PWM):
     #control_PWM = np.int0(control_PWM*1000)/1000.0
     for k in range(4):
         #control_PWM[k] = ("%.3f" % control_PWM[k])
-        control_PWM[k] = format(control_PWM[k], '.4g')
+        #control_PWM[k] = format(control_PWM[k], '.4g')
     print(control_PWM)
     loop_for(0.001, pwm0.set_duty_cycle, control_PWM[0])
     loop_for(0.001, pwm1.set_duty_cycle, control_PWM[1])
@@ -598,7 +598,7 @@ def main():
     Calculates the x, y, z coefficients for the four segments 
     of the trajectory
     """
-    #calibration_ESC()
+    calibration_ESC()
     wait_until_motor_is_ready()
     loop_for(0.5, pwm0.set_duty_cycle, SERVO_MIN)
     loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
