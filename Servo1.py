@@ -520,7 +520,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     #getting the desired position and yaw angle from trajectory planner: 
     #desired_pos_info = traj_planner()
     i = 0
-    n_run = 8
+    n_run = 6
     irun = 0
     pos, Euler, vel, A_vel = reading_positional_info()
 
@@ -585,7 +585,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
             t += time.clock() - start_loop
 
         t = 0
-        i = (i + 1) % 4
+        i = (i + 1) % 3
         irun += 1
         if irun >= n_run:
             break
@@ -598,7 +598,7 @@ def main():
     Calculates the x, y, z coefficients for the four segments 
     of the trajectory
     """
-    calibration_ESC()
+    #calibration_ESC()
     wait_until_motor_is_ready()
     loop_for(0.5, pwm0.set_duty_cycle, SERVO_MIN)
     loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
@@ -613,10 +613,10 @@ def main():
     x_coeffs = [[], [], [], []]
     y_coeffs = [[], [], [], []]
     z_coeffs = [[], [], [], []]
-    waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start - 0.1], [x_start, y_start, z_start - 0.1], [x_start, y_start, z_start]]
+    waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start - 0.1], [x_start, y_start, z_start]]
 
-    for i in range(4):
-        traj = TrajectoryGenerator(waypoints[i], waypoints[(i + 1) % 4], T)
+    for i in range(3):
+        traj = TrajectoryGenerator(waypoints[i], waypoints[(i + 1) % 3], T)
         traj.solve()
         x_coeffs[i] = traj.x_c
         y_coeffs[i] = traj.y_c
