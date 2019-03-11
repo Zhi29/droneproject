@@ -314,8 +314,8 @@ Euler_error_store = []
 
 
 #PD control parameters#######################################
-K_p_roll = 100 #40 #100
-K_p_pitch = 70 #50 #70
+K_p_roll = 40 #100
+K_p_pitch = 50 #70
 K_p_yaw = 5
 
 K_d_roll = 0.5 #0.1
@@ -423,6 +423,7 @@ def motor_mix_controller(u1, u2):
 
     Motor_mix = np.linalg.inv(np.array([[1,1,1,1], motor_mix_roll,
                                         motor_mix_pitch, motor_mix_yaw]))
+
 
     Force = np.dot(Motor_mix, np.array([u1,np.abs(u2[0]),np.abs(u2[1]),np.abs(u2[2])]))
     #Force = np.maximum(Force, m*g/10)
