@@ -516,7 +516,7 @@ def calculate_acceleration(c, t):
 
 
 
-def main_control_loop(x_c, y_c, z_c, store_PWM):
+def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     #getting the desired position and yaw angle from trajectory planner: 
     #desired_pos_info = traj_planner()
     i = 0
