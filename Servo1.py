@@ -314,8 +314,8 @@ Euler_error_store = []
 
 
 #PD control parameters#######################################
-K_p_roll = 200
-K_p_pitch = 200
+K_p_roll = 100
+K_p_pitch = 100
 K_p_yaw = 5
 
 K_d_roll = 0.5 #0.1
