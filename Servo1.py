@@ -61,7 +61,7 @@ pwm3.enable()
 #reading OptiTrack information via Internet SETTING #############################################################
 savet = (0.0,0.0,0.0)
 savet2 = (0.0,0.0,0.0)
-savepose = deque(maxlen=2)
+savepos = deque(maxlen=2)
 saveangu = deque(maxlen=2)
 sub_port = 5556
 context = zmq.Context()
@@ -188,37 +188,48 @@ def wait_until_motor_is_ready():
 
 
 def reading_positional_info():
-    start = time.clock()
+    start = time.time()
     #print('reading info.')
     contents  =  recv_array(socket_sub,copy=False)
+    #############################
+    # Rotation Matrix Readjusting the coordinates
+    Rotation_mat=np.array([[1,0,0],[0,0,-1],[0,1,0]])
+    #############################
+    #############################
+    # Reading 3 axis positions
     position = contents[0:3]
+    position = np.dot(Rotation_mat.T, position)
+    savet = (position[0],position[1],position[2])
+    #print("position:  ", position)
+    #############################
+    #############################
+    # Reading orientation in quaternions
     a = contents[3]
     b = contents[4]
     c = contents[5]
     d = contents[6]
     orientation = np.array([a,b,c,d])
     orientation[0] *= -1.0
+    #############################
     #print("orientation: ", orientation)
 
-    Rotation_mat=np.array([[1,0,0],[0,0,-1],[0,1,0]])
+    #############################
+    #Get Euler angles
     Euler = quaternion2euler(orientation)
     Euler = np.dot(Rotation_mat.T, Euler)
+    Euler = mod360(Euler)
     savet2 = (Euler[0],Euler[1],Euler[2])
+    #############################
     #print("Angle180", Euler[0]*180/np.pi,Euler[1]*180/np.pi,Euler[2]*180/np.pi)
 
+    savepos.appendleft(savet)
     saveangu.appendleft(savet2)
 
-    position = np.dot(Rotation_mat.T, position)
-    #print("position:  ", position)
-
-    savet = (position[0],position[1],position[2])
-    savepose.appendleft(savet)
-
-    elapsed = (time.clock() - start)# record the time to calculate the velocities.
+    elapsed = (time.time() - start)# record the time to calculate the velocities.
     #print("time",elapsed)
-    vx = (savepose[0][0] - savepose[-1][0])/elapsed*1.0
-    vy = (savepose[0][1] - savepose[-1][1])/elapsed*1.0
-    vz = (savepose[0][2] - savepose[-1][2])/elapsed*1.0
+    vx = (savepos[0][0] - savepos[-1][0])/elapsed*1.0
+    vy = (savepos[0][1] - savepos[-1][1])/elapsed*1.0
+    vz = (savepos[0][2] - savepos[-1][2])/elapsed*1.0
     vel = (vx,vy,vz)
     ax = (saveangu[0][0] - saveangu[-1][0])/elapsed*1.0
     ay = (saveangu[0][1] - saveangu[-1][1])/elapsed*1.0
@@ -230,6 +241,15 @@ def reading_positional_info():
     #print ("---------------------------------------------------------------------------------")
     return position, Euler, vel, Angu
 
+def mod360(Euler):
+    for i in range(3):
+        if Euler[i] > 0:
+            while Euler[i] >= 360:
+                Euler[i] -= 360
+        elif Euler[i] < 0:
+            while Euler[i] <= -360:
+                Euler[i] += 360
+    return Euler
 
 def quaternion2euler(q):
     m = np.zeros((3,3))
@@ -302,7 +322,7 @@ Max_PWM_Hz = 800  # Hz
 Min_PWM_Hz = 571.4 # Hz
 
 pwm_thres_max = SERVO_MAX
-pwm_thres_min = SERVO_MAX * 0.3
+pwm_thres_min = SERVO_MIN + (SERVO_MAX - SERVO_MIN) * 0.3
 
 cof = 0.5*np.sqrt(2)
 #Motor_mix = np.linalg.inv(np.array([[1,1,1,1],[-cof * L, cof * L, cof * L, -cof * L],
