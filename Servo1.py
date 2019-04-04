@@ -227,7 +227,7 @@ def reading_positional_info():
     #print("Angu speed",Angu)# currently in optitrack coordinates
     #print("Angu speed",ax*180/np.pi,ay*180/np.pi,az*180/np.pi)# currently in optitrack coordinates
     #print("speed",vel)# currently in optitrack coordinates
-    print ("---------------------------------------------------------------------------------")
+    #print ("---------------------------------------------------------------------------------")
     return position, Euler, vel, Angu
 
 
@@ -531,7 +531,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 
     while True: # This is the loop for trajectory generation.
         while t < T:
-            start_loop = time.clock()
+            start_loop = time.time()
 
             des_x_pos = calculate_position(x_c[i], t)[0]
             des_y_pos = calculate_position(y_c[i], t)[0]
@@ -582,7 +582,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
             store_pos = np.vstack((store_pos,pos_error))
             np.save("store_pos.npy", store_pos)
 
-            t += time.clock() - start_loop
+            t += time.time() - start_loop
 
         t = 0
         i = (i + 1) % 3
@@ -648,3 +648,4 @@ def visulization():
 
 if __name__ == "__main__":
     main()
+
