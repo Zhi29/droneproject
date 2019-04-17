@@ -543,7 +543,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     i = 0
     n_run = 6
     irun = 0
-    pos, Euler, vel, A_vel = reading_positional_info()
+    #pos, Euler, vel, A_vel = reading_positional_info()
 
     des_yaw = 0 # This just set for 0 temporarily
 
@@ -591,15 +591,17 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
             pos, Euler, vel, A_vel = reading_positional_info()
             u1, desired_pos, pos_error = position_control(desired_pos_info, pos, vel)
 
-            for ii in range(5):
-                pos, Euler, vel, A_vel = reading_positional_info()
-                u2, Euler_error = attitude_control(Euler, A_vel, desired_pos)
-                control_PWM = motor_mix_controller(u1, u2)
-                drive_motor(control_PWM)
-                store_PWM = np.vstack((store_PWM,control_PWM))
-                np.save("store_PWM.npy", store_PWM)
-                store_Euler = np.vstack((store_Euler,Euler_error))
-                np.save("store_Euler.npy", store_Euler)
+            #for ii in range(5):
+            #pos, Euler, vel, A_vel = reading_positional_info()
+            u2, Euler_error = attitude_control(Euler, A_vel, desired_pos)
+            control_PWM = motor_mix_controller(u1, u2)
+            drive_motor(control_PWM)
+            store_PWM = np.vstack((store_PWM,control_PWM))
+            np.save("store_PWM.npy", store_PWM)
+            store_Euler = np.vstack((store_Euler,Euler_error))
+            np.save("store_Euler.npy", store_Euler)
+
+
             store_pos = np.vstack((store_pos,pos_error))
             np.save("store_pos.npy", store_pos)
 
