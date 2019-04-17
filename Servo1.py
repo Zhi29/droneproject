@@ -607,13 +607,13 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     np.save("store_pos.npy", store_pos)
 
     t += time.time() - start_loop
-
+'''
     t = 0
     i = (i + 1) % 3
     irun += 1
     if irun >= n_run:
         break
-
+'''
     print("Done")
 
 
