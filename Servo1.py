@@ -589,7 +589,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 
     # reading positional info from optitrack:
     pos, Euler, vel, A_vel = reading_positional_info()
-    #print("pos: ", pos)
+    print("pos: ", pos)
     u1, desired_pos, pos_error = position_control(desired_pos_info, pos, vel)
 
     #for ii in range(5):
@@ -613,9 +613,9 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     irun += 1
     if irun >= n_run:
         break
-'''
-    #print("Done")
 
+    print("Done")
+'''
 
 def main():
     """
@@ -649,7 +649,8 @@ def main():
     store_PWM = np.zeros(4)
     store_Euler = np.zeros(3)
     store_pos = np.zeros(3)
-    main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM, store_Euler, store_pos)
+    while True:
+        main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM, store_Euler, store_pos)
     
     #visulization()
 
@@ -671,8 +672,10 @@ def visulization():
     
 
 if __name__ == "__main__":
-    #main()
+    main()
+    '''
     while True:
         pos,_,_,_ = reading_positional_info()
         print("pos: ", pos)
+    '''
 
