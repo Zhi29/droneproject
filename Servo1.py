@@ -201,7 +201,7 @@ def reading_positional_info():
     position = contents[0:3]
     position = np.dot(Rotation_mat.T, position)
     savet = (position[0],position[1],position[2])
-    #print("position:  ", position)
+    print("position:  ", position)
     #############################
     #############################
     # Reading orientation in quaternions
