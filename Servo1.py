@@ -398,7 +398,7 @@ def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler 
     A_vel_error = desired_A_vel - A_vel
     Euler_error = desired_pose - Euler
 
-    #print("Euler_error: ", Euler_error*180/np.pi)
+    print("Euler_error: ", Euler_error*180/np.pi)
     #print("Euler_error: ", Euler_error)
 
     #Store pose errors in lists.
@@ -472,7 +472,7 @@ def motor_mix_controller(u1, u2):
             control_PWM[i] = pwm_thres_max
         elif control_PWM[i] < pwm_thres_min:
             control_PWM[i] = pwm_thres_min
-    #print("control_PWM", control_PWM)
+    print("control_PWM", control_PWM)
 
     return control_PWM
 
