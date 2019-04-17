@@ -594,12 +594,12 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 
     
     u1, desired_pos, pos_error = position_control(desired_pos_info, pos, vel)
-
+'''
     #for ii in range(5):
     #pos, Euler, vel, A_vel = reading_positional_info()
     u2, Euler_error = attitude_control(Euler, A_vel, desired_pos)
     control_PWM = motor_mix_controller(u1, u2)
-    drive_motor(control_PWM)
+    drive_motor(control_PWM)'''
     #store_PWM = np.vstack((store_PWM,control_PWM))
     #np.save("store_PWM.npy", store_PWM)
     #store_Euler = np.vstack((store_Euler,Euler_error))
