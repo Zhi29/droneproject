@@ -540,6 +540,7 @@ def calculate_acceleration(c, t):
 def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     #getting the desired position and yaw angle from trajectory planner: 
     #desired_pos_info = traj_planner()
+    '''
     i = 0
     n_run = 6
     irun = 0
@@ -586,10 +587,12 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     #put the pos in array
     #pos = np.array([x_pos, y_pos, z_pos])
     #vel = np.array([x_vel, y_vel, z_vel])
-
+'''
     # reading positional info from optitrack:
     pos, Euler, vel, A_vel = reading_positional_info()
     print("pos: ", pos)
+
+    '''
     u1, desired_pos, pos_error = position_control(desired_pos_info, pos, vel)
 
     #for ii in range(5):
@@ -606,7 +609,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     store_pos = np.vstack((store_pos,pos_error))
     np.save("store_pos.npy", store_pos)
 
-    t += time.time() - start_loop
+    t += time.time() - start_loop'''
 '''
     t = 0
     i = (i + 1) % 3
