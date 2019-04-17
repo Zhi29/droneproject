@@ -201,7 +201,7 @@ def reading_positional_info():
     position = contents[0:3]
     position = np.dot(Rotation_mat.T, position)
     savet = (position[0],position[1],position[2])
-    print("position:  ", position)
+    #print("position:  ", position)
     #############################
     #############################
     # Reading orientation in quaternions
@@ -653,8 +653,10 @@ def main():
     store_Euler = np.zeros(3)
     store_pos = np.zeros(3)
     while True:
+    	a = time.time()
         main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM, store_Euler, store_pos)
-    
+    	b = time.time()
+    	print("time: ", b - a)
     #visulization()
 
 def before_test():
