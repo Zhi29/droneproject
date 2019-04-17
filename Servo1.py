@@ -614,7 +614,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     if irun >= n_run:
         break
 '''
-    print("Done")
+    #print("Done")
 
 
 def main():
