@@ -71,7 +71,7 @@ socket_sub = context.socket(zmq.SUB)
 socket_sub.connect("tcp://192.168.1.9:%d" %sub_port)
 #socket_sub.setsockopt(zmq.SUBSCRIBE, b"")
 socket_sub.setsockopt(zmq.SUBSCRIBE,b'')
-socket_sub.setsockopt(zmq.CONFLATE, 1)
+#socket_sub.setsockopt(zmq.CONFLATE, 1)
 def recv_array(socket, flags=0, copy=True, track=False):
     """recv a numpy array"""
     md = socket.recv_json(flags=flags)
@@ -399,7 +399,7 @@ def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler 
     A_vel_error = desired_A_vel - A_vel
     Euler_error = desired_pose - Euler
 
-    print("Euler_error: ", Euler_error*180/np.pi)
+    #print("Euler_error: ", Euler_error*180/np.pi)
     #print("Euler_error: ", Euler_error)
 
     #Store pose errors in lists.
@@ -448,7 +448,7 @@ def motor_mix_controller(u1, u2):
 
     Force = np.dot(Motor_mix, np.array([u1,np.abs(u2[0]),np.abs(u2[1]),np.abs(u2[2])]))
     #Force = np.maximum(Force, m*g/10)
-    print("u1: ", u1)
+    #print("u1: ", u1)
     #print("u2: ", u2)
     #print("Motor_mix: ", Motor_mix)
     #print("Force: ", Force)
@@ -473,7 +473,7 @@ def motor_mix_controller(u1, u2):
             control_PWM[i] = pwm_thres_max
         elif control_PWM[i] < pwm_thres_min:
             control_PWM[i] = pwm_thres_min
-    print("control_PWM", control_PWM)
+    #print("control_PWM", control_PWM)
 
     return control_PWM
 
@@ -589,6 +589,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 
             # reading positional info from optitrack:
             pos, Euler, vel, A_vel = reading_positional_info()
+            print("pos: ", pos)
             u1, desired_pos, pos_error = position_control(desired_pos_info, pos, vel)
 
             #for ii in range(5):
