@@ -485,10 +485,10 @@ def drive_motor(control_PWM):
         #control_PWM[k] = ("%.3f" % control_PWM[k])
         #control_PWM[k] = format(control_PWM[k], '.4g')
     #print(control_PWM)
-    loop_for(0.001, pwm0.set_duty_cycle, control_PWM[0])
-    loop_for(0.001, pwm1.set_duty_cycle, control_PWM[1])
-    loop_for(0.001, pwm2.set_duty_cycle, control_PWM[2])
-    loop_for(0.001, pwm3.set_duty_cycle, control_PWM[3])
+    loop_for(0.0001, pwm0.set_duty_cycle, control_PWM[0])
+    loop_for(0.0001, pwm1.set_duty_cycle, control_PWM[1])
+    loop_for(0.0001, pwm2.set_duty_cycle, control_PWM[2])
+    loop_for(0.0001, pwm3.set_duty_cycle, control_PWM[3])
 
 def calculate_position(c, t):
     """
@@ -599,7 +599,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     #pos, Euler, vel, A_vel = reading_positional_info()
     u2, Euler_error = attitude_control(Euler, A_vel, desired_pos)
     control_PWM = motor_mix_controller(u1, u2)
-    #drive_motor(control_PWM)
+    drive_motor(control_PWM)
     #store_PWM = np.vstack((store_PWM,control_PWM))
     #np.save("store_PWM.npy", store_PWM)
     #store_Euler = np.vstack((store_Euler,Euler_error))
