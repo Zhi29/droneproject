@@ -447,7 +447,7 @@ def motor_mix_controller(u1, u2):
 
     Force = np.dot(Motor_mix, np.array([u1,np.abs(u2[0]),np.abs(u2[1]),np.abs(u2[2])]))
     #Force = np.maximum(Force, m*g/10)
-    #print("u1: ", u1)
+    print("u1: ", u1)
     #print("u2: ", u2)
     #print("Motor_mix: ", Motor_mix)
     #print("Force: ", Force)
