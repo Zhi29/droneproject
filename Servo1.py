@@ -550,70 +550,70 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     t = 0
     
 
-    while True: # This is the loop for trajectory generation.
-        while t < T:
-            start_loop = time.time()
+    #while True: # This is the loop for trajectory generation.
+    #    while t < T:
+    start_loop = time.time()
 
-            des_x_pos = calculate_position(x_c[i], t)[0]
-            des_y_pos = calculate_position(y_c[i], t)[0]
-            des_z_pos = calculate_position(z_c[i], t)[0]
-            des_x_vel = calculate_velocity(x_c[i], t)[0]
-            des_y_vel = calculate_velocity(y_c[i], t)[0]
-            des_z_vel = calculate_velocity(z_c[i], t)[0]
-            des_x_acc = calculate_acceleration(x_c[i], t)[0]
-            des_y_acc = calculate_acceleration(y_c[i], t)[0]
-            des_z_acc = calculate_acceleration(z_c[i], t)[0]
+    des_x_pos = calculate_position(x_c[i], t)[0]
+    des_y_pos = calculate_position(y_c[i], t)[0]
+    des_z_pos = calculate_position(z_c[i], t)[0]
+    des_x_vel = calculate_velocity(x_c[i], t)[0]
+    des_y_vel = calculate_velocity(y_c[i], t)[0]
+    des_z_vel = calculate_velocity(z_c[i], t)[0]
+    des_x_acc = calculate_acceleration(x_c[i], t)[0]
+    des_y_acc = calculate_acceleration(y_c[i], t)[0]
+    des_z_acc = calculate_acceleration(z_c[i], t)[0]
 
-            #put the desired values into arrays
-            desired_pos = np.array ([des_x_pos, des_y_pos, des_z_pos])
-            desired_vel = np.array ([des_x_vel, des_y_vel, des_z_vel])
-            desired_acc = np.array ([des_x_acc, des_y_acc, des_z_acc])
+    #put the desired values into arrays
+    desired_pos = np.array ([des_x_pos, des_y_pos, des_z_pos])
+    desired_vel = np.array ([des_x_vel, des_y_vel, des_z_vel])
+    desired_acc = np.array ([des_x_acc, des_y_acc, des_z_acc])
 
-            #store the desired values
-            #des_pos_store.append(desired_pos)
-            #des_vel_store.append(desired_vel)
+    #store the desired values
+    #des_pos_store.append(desired_pos)
+    #des_vel_store.append(desired_vel)
 
-            #stack the value in a list
-            desired_pos_info = []    
-            desired_pos_info.append(desired_pos)
-            desired_pos_info.append(desired_vel)
-            desired_pos_info.append(desired_acc)
-            desired_pos_info.append(des_yaw)
+    #stack the value in a list
+    desired_pos_info = []    
+    desired_pos_info.append(desired_pos)
+    desired_pos_info.append(desired_vel)
+    desired_pos_info.append(desired_acc)
+    desired_pos_info.append(des_yaw)
 
-            #put the pose values in array
-            #Euler = np.array([roll, pitch, yaw])
-            #A_vel = np.array([roll_vel, pitch_vel, yaw_vel])
-            #put the pos in array
-            #pos = np.array([x_pos, y_pos, z_pos])
-            #vel = np.array([x_vel, y_vel, z_vel])
+    #put the pose values in array
+    #Euler = np.array([roll, pitch, yaw])
+    #A_vel = np.array([roll_vel, pitch_vel, yaw_vel])
+    #put the pos in array
+    #pos = np.array([x_pos, y_pos, z_pos])
+    #vel = np.array([x_vel, y_vel, z_vel])
 
-            # reading positional info from optitrack:
-            pos, Euler, vel, A_vel = reading_positional_info()
-            print("pos: ", pos)
-            u1, desired_pos, pos_error = position_control(desired_pos_info, pos, vel)
+    # reading positional info from optitrack:
+    pos, Euler, vel, A_vel = reading_positional_info()
+    #print("pos: ", pos)
+    u1, desired_pos, pos_error = position_control(desired_pos_info, pos, vel)
 
-            #for ii in range(5):
-            #pos, Euler, vel, A_vel = reading_positional_info()
-            u2, Euler_error = attitude_control(Euler, A_vel, desired_pos)
-            control_PWM = motor_mix_controller(u1, u2)
-            drive_motor(control_PWM)
-            store_PWM = np.vstack((store_PWM,control_PWM))
-            np.save("store_PWM.npy", store_PWM)
-            store_Euler = np.vstack((store_Euler,Euler_error))
-            np.save("store_Euler.npy", store_Euler)
+    #for ii in range(5):
+    #pos, Euler, vel, A_vel = reading_positional_info()
+    u2, Euler_error = attitude_control(Euler, A_vel, desired_pos)
+    control_PWM = motor_mix_controller(u1, u2)
+    drive_motor(control_PWM)
+    store_PWM = np.vstack((store_PWM,control_PWM))
+    np.save("store_PWM.npy", store_PWM)
+    store_Euler = np.vstack((store_Euler,Euler_error))
+    np.save("store_Euler.npy", store_Euler)
 
 
-            store_pos = np.vstack((store_pos,pos_error))
-            np.save("store_pos.npy", store_pos)
+    store_pos = np.vstack((store_pos,pos_error))
+    np.save("store_pos.npy", store_pos)
 
-            t += time.time() - start_loop
+    t += time.time() - start_loop
 
-        t = 0
-        i = (i + 1) % 3
-        irun += 1
-        if irun >= n_run:
-            break
-    
+    t = 0
+    i = (i + 1) % 3
+    irun += 1
+    if irun >= n_run:
+        break
+
     print("Done")
 
 
