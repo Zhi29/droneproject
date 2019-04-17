@@ -671,5 +671,8 @@ def visulization():
     
 
 if __name__ == "__main__":
-    main()
+    #main()
+    while True:
+        pos,_,_,_ = reading_positional_info()
+        print("pos: ", pos)
 
