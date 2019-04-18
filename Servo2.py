@@ -382,9 +382,10 @@ def position_control(desired_pos_info, pos, vel, loop): #input should be generat
 
 	desired_pose = np.array([desired_roll, desired_pitch, desired_yaw])
 
-	judge = (np.abs(pos_error) <= 0.01)
+	judge = (np.abs(pos_error) <= 0.02)
 	if judge[0] == True and judge[1] == True and judge[2] == True:
 		loop = False
+
 
 
 
@@ -623,9 +624,9 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 			#np.save("store_pos.npy", store_pos)
 
 			t += time.time() - start_loop
-
+			print("time spend: ", t)
 		 
-		print("reach the %dth via point: " % index)
+		print("reach the %d via point: " % index)
 
 		if index < num_via_points - 1:
 			index += 1
