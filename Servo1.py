@@ -445,7 +445,7 @@ def motor_mix_controller(u1, u2):
     Motor_mix = np.linalg.inv(np.array([[1,1,1,1], motor_mix_roll,
                                         motor_mix_pitch, motor_mix_yaw]))
 
-
+    u2 = np.abs(u2)
     Force = np.dot(Motor_mix, np.array([u1, u2[0],u2[1],u2[2]]))
     #for index in range(4):
     #	if Force[index] < m*g/6:
