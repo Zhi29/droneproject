@@ -488,10 +488,10 @@ def drive_motor(control_PWM):
         #control_PWM[k] = ("%.3f" % control_PWM[k])
         #control_PWM[k] = format(control_PWM[k], '.4g')
     print(control_PWM)
-    loop_for(0.0005, pwm0.set_duty_cycle, control_PWM[0])
-    loop_for(0.0005, pwm1.set_duty_cycle, control_PWM[1])
-    loop_for(0.0005, pwm2.set_duty_cycle, control_PWM[2])
-    loop_for(0.0005, pwm3.set_duty_cycle, control_PWM[3])
+    loop_for(0.0001, pwm0.set_duty_cycle, control_PWM[0])
+    loop_for(0.0001, pwm1.set_duty_cycle, control_PWM[1])
+    loop_for(0.0001, pwm2.set_duty_cycle, control_PWM[2])
+    loop_for(0.0001, pwm3.set_duty_cycle, control_PWM[3])
 
 def calculate_position(c, t):
     """
@@ -628,7 +628,7 @@ def main():
     Calculates the x, y, z coefficients for the four segments 
     of the trajectory
     """
-    calibration_ESC()
+    #calibration_ESC()
     wait_until_motor_is_ready()
     loop_for(0.5, pwm0.set_duty_cycle, SERVO_MIN)
     loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
@@ -655,11 +655,7 @@ def main():
     store_PWM = np.zeros(4)
     store_Euler = np.zeros(3)
     store_pos = np.zeros(3)
-    while True:
-    	a = time.time()
-        main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM, store_Euler, store_pos)
-    	b = time.time()
-    	print("time: ", b - a)
+    main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM, store_Euler, store_pos)
     #visulization()
 
 def before_test():
