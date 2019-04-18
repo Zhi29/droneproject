@@ -614,7 +614,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 				#print("pos in the attitude: ", pos)
 				u2 = attitude_control(Euler, A_vel, desired_pos)
 				control_PWM = motor_mix_controller(u1, u2)
-				print(control_PWM)
+				#print(control_PWM)
 				drive_motor(control_PWM)
 			#store_PWM = np.vstack((store_PWM,control_PWM))
 			#np.save("store_PWM.npy", store_PWM)
@@ -666,9 +666,9 @@ def main():
 		y_coeffs[i] = traj.y_c
 		z_coeffs[i] = traj.z_c
 
-	#store_PWM = np.zeros(4)
-	#store_Euler = np.zeros(3)
-	#store_pos = np.zeros(3)
+	store_PWM = np.zeros(4)
+	store_Euler = np.zeros(3)
+	store_pos = np.zeros(3)
 	main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM, store_Euler, store_pos)
 	#visulization()
 
