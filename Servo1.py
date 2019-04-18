@@ -640,9 +640,9 @@ def main():
     y_start = pos[1]
     z_start = pos[2]
 
-    x_coeffs = [[], [], [], []]
-    y_coeffs = [[], [], [], []]
-    z_coeffs = [[], [], [], []]
+    x_coeffs = [[], [], [], [],[], [], [], [],[],[]]
+    y_coeffs = [[], [], [], [],[], [], [], [],[],[]]
+    z_coeffs = [[], [], [], [],[], [], [], [],[],[]]
     waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start - 0.5],
     			 [x_start, y_start, z_start - 0.5], 
     			 [x_start, y_start, z_start - 0.5], 
