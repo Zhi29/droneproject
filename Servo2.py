@@ -678,8 +678,8 @@ def main():
 	while warm_up < 1.0:
 		drive_motor(np.array([pwm_thres_min,pwm_thres_min,pwm_thres_min,pwm_thres_min]))
 		warm_up = time.time() - t1
-	
-	main_control_loop(x_coeffs, y_coeffs, z_coeffs)
+
+	#main_control_loop(x_coeffs, y_coeffs, z_coeffs)
 	#visulization()
 
 def before_test():
