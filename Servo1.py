@@ -541,18 +541,18 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     #getting the desired position and yaw angle from trajectory planner: 
     #desired_pos_info = traj_planner()
     
-    i = 0
-    n_run = 6
-    irun = 0
-    #pos, Euler, vel, A_vel = reading_positional_info()
+	i = 0
+	n_run = 6
+	irun = 0
+	#pos, Euler, vel, A_vel = reading_positional_info()
 
-    des_yaw = 0 # This just set for 0 temporarily
+	des_yaw = 0 # This just set for 0 temporarily
 
-    t = 0
-    
+	t = 0
+
 
 	while True: # This is the loop for trajectory generation.
-    	while t < T:
+		while t < T:
 			start_loop = time.time()
 
 			des_x_pos = calculate_position(x_c[i], t)[0]
