@@ -609,7 +609,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 
 			u1, desired_pos, loop = position_control(desired_pos_info, pos, vel, loop)
 
-			for ii in range(5):
+			for ii in range(2):
 				pos, Euler, vel, A_vel = reading_positional_info()
 				u2 = attitude_control(Euler, A_vel, desired_pos)
 				control_PWM = motor_mix_controller(u1, u2)
