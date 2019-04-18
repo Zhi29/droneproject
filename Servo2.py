@@ -382,7 +382,7 @@ def position_control(desired_pos_info, pos, vel, loop): #input should be generat
 
 	desired_pose = np.array([desired_roll, desired_pitch, desired_yaw])
 
-	judge = (np.abs(pos_error) <= 0.05)
+	judge = (np.abs(pos_error) <= 0.01)
 	if judge[0] == True and judge[1] == True and judge[2] == True:
 		loop = False
 
