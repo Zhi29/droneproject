@@ -446,15 +446,15 @@ def motor_mix_controller(u1, u2):
                                         motor_mix_pitch, motor_mix_yaw]))
 
 
-    Force = np.dot(Motor_mix, np.array([u1,np.abs(u2[0]),np.abs(u2[1]),np.abs(u2[2])]))
-    for index in range(4):
-    	if Force[index] < m*g/6:
-        	Force[index] = m*g/6
+    Force = np.dot(Motor_mix, np.array([u1, u2[0],u2[1],u2[2]]))
+    #for index in range(4):
+    #	if Force[index] < m*g/6:
+    #    	Force[index] = m*g/6
     #Force = np.maximum(Force, m*g/10)
     #print("u1: ", u1)
-    #print("u2: ", u2)
+    print("u2: ", u2)
     #print("Motor_mix: ", Motor_mix)
-    #print("Force: ", Force)
+    print("Force: ", Force)
 
     # transform force of each motor into rotation speed :
     omega = np.sqrt(1/k * Force)
