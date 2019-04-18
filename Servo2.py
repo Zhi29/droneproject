@@ -323,7 +323,7 @@ Max_PWM_Hz = 800  # Hz
 Min_PWM_Hz = 571.4 # Hz
 
 pwm_thres_max = SERVO_MAX * 0.95
-pwm_thres_min = SERVO_MIN + (SERVO_MAX - SERVO_MIN) * 0.2
+pwm_thres_min = SERVO_MIN + (SERVO_MAX - SERVO_MIN) * 0.3
 
 cof = 0.5*np.sqrt(2)
 #Motor_mix = np.linalg.inv(np.array([[1,1,1,1],[-cof * L, cof * L, cof * L, -cof * L],
@@ -668,9 +668,9 @@ def main():
 		y_coeffs[i] = traj.y_c
 		z_coeffs[i] = traj.z_c
 
-	store_PWM = np.zeros(4)
-	store_Euler = np.zeros(3)
-	store_pos = np.zeros(3)
+	#store_PWM = np.zeros(4)
+	#store_Euler = np.zeros(3)
+	#store_pos = np.zeros(3)
 
 	warm_up = 0
 
