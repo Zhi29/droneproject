@@ -448,8 +448,8 @@ def motor_mix_controller(u1, u2):
 
     Force = np.dot(Motor_mix, np.array([u1,np.abs(u2[0]),np.abs(u2[1]),np.abs(u2[2])]))
     for index in range(4):
-    	if Force[index] < m*g / 4:
-        	Force[index] = m*g/4
+    	if Force[index] < 0:
+        	Force[index] = -Force[index]
     #Force = np.maximum(Force, m*g/10)
     #print("u1: ", u1)
     #print("u2: ", u2)
