@@ -545,7 +545,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     #desired_pos_info = traj_planner()
     
 	i = 0
-	n_run = 6
+	n_run = 14
 	irun = 0
 	#pos, Euler, vel, A_vel = reading_positional_info()
 
@@ -615,7 +615,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 			t += time.time() - start_loop
 
 		t = 0
-		i = (i + 1) % 3
+		i = (i + 1) % 7
 		irun += 1
 		if irun >= n_run:
 			break
@@ -643,7 +643,12 @@ def main():
     x_coeffs = [[], [], [], []]
     y_coeffs = [[], [], [], []]
     z_coeffs = [[], [], [], []]
-    waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start - 0.5], [x_start, y_start, z_start]]
+    waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start - 0.5],
+    			 [x_start, y_start, z_start - 0.5],
+    			 [x_start, y_start, z_start - 0.5],
+    			 [x_start, y_start, z_start - 0.5],
+    			 [x_start, y_start, z_start - 0.5],
+    			 [x_start, y_start, z_start]]
 
     for i in range(3):
         traj = TrajectoryGenerator(waypoints[i], waypoints[(i + 1) % 3], T)
