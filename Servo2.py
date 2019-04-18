@@ -71,7 +71,7 @@ socket_sub = context.socket(zmq.SUB)
 socket_sub.connect("tcp://192.168.1.9:%d" %sub_port)
 #socket_sub.setsockopt(zmq.SUBSCRIBE, b"")
 socket_sub.setsockopt(zmq.SUBSCRIBE,b'')
-socket_sub.setsockopt(zmq.CONFLATE, 1)
+#socket_sub.setsockopt(zmq.CONFLATE, 1)
 def recv_array(socket, flags=0, copy=True, track=False):
 	"""recv a numpy array"""
 	md = socket.recv_json(flags=flags)
