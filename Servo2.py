@@ -323,7 +323,7 @@ Max_PWM_Hz = 800  # Hz
 Min_PWM_Hz = 571.4 # Hz
 
 pwm_thres_max = SERVO_MAX * 0.95
-pwm_thres_min = SERVO_MIN + (SERVO_MAX - SERVO_MIN) * 0.3
+pwm_thres_min = SERVO_MIN + (SERVO_MAX - SERVO_MIN) * 0.2
 
 cof = 0.5*np.sqrt(2)
 #Motor_mix = np.linalg.inv(np.array([[1,1,1,1],[-cof * L, cof * L, cof * L, -cof * L],
@@ -549,7 +549,7 @@ def calculate_acceleration(c, t):
 
 
 
-def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
+def main_control_loop(x_c, y_c, z_c):
 	#getting the desired position and yaw angle from trajectory planner: 
 	#desired_pos_info = traj_planner()
 	
@@ -671,7 +671,15 @@ def main():
 	store_PWM = np.zeros(4)
 	store_Euler = np.zeros(3)
 	store_pos = np.zeros(3)
-	main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM, store_Euler, store_pos)
+
+	warm_up = 0
+
+	t1 = time.time()
+	while warm_up < 1.0:
+		drive_motor(np.array([pwm_thres_min,pwm_thres_min,pwm_thres_min,pwm_thres_min]))
+		warm_up = time.time() - t1
+	
+	main_control_loop(x_coeffs, y_coeffs, z_coeffs)
 	#visulization()
 
 def before_test():
