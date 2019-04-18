@@ -308,7 +308,7 @@ Ixx = 3.503e-2#3.613e-2
 Iyy = 3.503e-2#3.613e-2 
 Izz = 6.658e-2#6.707e-2 
 Inertia = np.array([[Ixx,0,0],[0,Iyy,0],[0,0,Izz]])
-T = 5 # time for complete trajectory
+T = 1 # time for complete trajectory
 
 # Model coefficients with Forces and Torques
 k = 3.876e-5
