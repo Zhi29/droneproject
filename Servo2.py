@@ -625,6 +625,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 
 			t += time.time() - start_loop
 			print("time spend: ", t)
+			t = 0
 		 
 		print("reach the %d via point: " % index)
 
