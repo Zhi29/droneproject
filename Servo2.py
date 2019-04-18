@@ -323,7 +323,7 @@ Max_PWM_Hz = 800  # Hz
 Min_PWM_Hz = 571.4 # Hz
 
 pwm_thres_max = SERVO_MAX * 0.95
-pwm_thres_min = SERVO_MIN + (SERVO_MAX - SERVO_MIN) * 0.3
+pwm_thres_min = SERVO_MIN + (SERVO_MAX - SERVO_MIN) * 0.2
 
 cof = 0.5*np.sqrt(2)
 #Motor_mix = np.linalg.inv(np.array([[1,1,1,1],[-cof * L, cof * L, cof * L, -cof * L],
@@ -679,7 +679,7 @@ def main():
 		drive_motor(np.array([pwm_thres_min,pwm_thres_min,pwm_thres_min,pwm_thres_min]))
 		warm_up = time.time() - t1
 
-	#main_control_loop(x_coeffs, y_coeffs, z_coeffs)
+	main_control_loop(x_coeffs, y_coeffs, z_coeffs)
 	#visulization()
 
 def before_test():
