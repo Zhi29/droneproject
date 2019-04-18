@@ -625,7 +625,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 			t += time.time() - start_loop
 
 		 
-		print("reach %d via point: " % index)
+		print("reach the %dth via point: " % index)
 
 		if index < num_via_points - 1:
 			index += 1
