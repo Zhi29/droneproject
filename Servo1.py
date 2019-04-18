@@ -452,9 +452,9 @@ def motor_mix_controller(u1, u2):
         	Force[index] = m*g/6
     #Force = np.maximum(Force, m*g/10)
     #print("u1: ", u1)
-    print("u2: ", u2)
+    #print("u2: ", u2)
     #print("Motor_mix: ", Motor_mix)
-    print("Force: ", Force)
+    #print("Force: ", Force)
 
     # transform force of each motor into rotation speed :
     omega = np.sqrt(1/k * Force)
@@ -487,7 +487,7 @@ def drive_motor(control_PWM):
     #for k in range(4):
         #control_PWM[k] = ("%.3f" % control_PWM[k])
         #control_PWM[k] = format(control_PWM[k], '.4g')
-    print(control_PWM)
+    #print(control_PWM)
     loop_for(0.0001, pwm0.set_duty_cycle, control_PWM[0])
     loop_for(0.0001, pwm1.set_duty_cycle, control_PWM[1])
     loop_for(0.0001, pwm2.set_duty_cycle, control_PWM[2])
@@ -593,7 +593,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 
 			# reading positional info from optitrack:
 			pos, Euler, vel, A_vel = reading_positional_info()
-			print("pos: ", pos)
+			#print("pos: ", pos)
 
 
 			u1, desired_pos, pos_error = position_control(desired_pos_info, pos, vel)
