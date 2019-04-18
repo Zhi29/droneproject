@@ -322,7 +322,7 @@ Cr = 615.69#615.1 # rad/s
 Max_PWM_Hz = 800  # Hz
 Min_PWM_Hz = 571.4 # Hz
 
-pwm_thres_max = SERVO_MAX
+pwm_thres_max = SERVO_MAX * 0.95
 pwm_thres_min = SERVO_MIN + (SERVO_MAX - SERVO_MIN) * 0.3
 
 cof = 0.5*np.sqrt(2)
@@ -382,7 +382,7 @@ def position_control(desired_pos_info, pos, vel, loop): #input should be generat
 
 	desired_pose = np.array([desired_roll, desired_pitch, desired_yaw])
 
-	judge = (np.abs(pos_error) <= 0.02)
+	judge = (np.abs(pos_error) <= 0.04)
 	if judge[0] == True and judge[1] == True and judge[2] == True:
 		loop = False
 
@@ -455,8 +455,8 @@ def motor_mix_controller(u1, u2):
 	u2 = np.abs(u2)
 	Force = np.dot(Motor_mix, np.array([u1, u2[0],u2[1],u2[2]]))
 	for index in range(4):
-		if Force[index] < m*g/6:
-			Force[index] = m*g/6
+		if Force[index] < m*g/4:
+			Force[index] = m*g/4
 	#Force = np.maximum(Force, m*g/10)
 	#print("u1: ", u1)
 	#print("u2: ", u2)
@@ -473,7 +473,7 @@ def motor_mix_controller(u1, u2):
 
 	#print("dutycycle: ", dutycycle)
 
-	 #control_PWM = 1000/(dutycycle * (Max_PWM_Hz - Min_PWM_Hz) + Min_PWM_Hz)
+	#control_PWM = 1000/(dutycycle * (Max_PWM_Hz - Min_PWM_Hz) + Min_PWM_Hz)
 	control_PWM = dutycycle * (SERVO_MAX - SERVO_MIN) + SERVO_MIN
 
 	# transform rotation speed into PWM duty cycles : 
@@ -666,9 +666,9 @@ def main():
 		y_coeffs[i] = traj.y_c
 		z_coeffs[i] = traj.z_c
 
-	store_PWM = np.zeros(4)
-	store_Euler = np.zeros(3)
-	store_pos = np.zeros(3)
+	#store_PWM = np.zeros(4)
+	#store_Euler = np.zeros(3)
+	#store_pos = np.zeros(3)
 	main_control_loop(x_coeffs, y_coeffs, z_coeffs, store_PWM, store_Euler, store_pos)
 	#visulization()
 
@@ -691,9 +691,3 @@ def visulization():
 
 if __name__ == "__main__":
 	main()
-	'''
-	while True:
-		pos,_,_,_ = reading_positional_info()
-		print("pos: ", pos)
-	'''
-
