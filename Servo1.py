@@ -71,7 +71,7 @@ socket_sub = context.socket(zmq.SUB)
 socket_sub.connect("tcp://192.168.1.9:%d" %sub_port)
 #socket_sub.setsockopt(zmq.SUBSCRIBE, b"")
 socket_sub.setsockopt(zmq.SUBSCRIBE,b'')
-#socket_sub.setsockopt(zmq.CONFLATE, 1)
+socket_sub.setsockopt(zmq.CONFLATE, 1)
 def recv_array(socket, flags=0, copy=True, track=False):
     """recv a numpy array"""
     md = socket.recv_json(flags=flags)
@@ -308,7 +308,7 @@ Ixx = 3.503e-2#3.613e-2
 Iyy = 3.503e-2#3.613e-2 
 Izz = 6.658e-2#6.707e-2 
 Inertia = np.array([[Ixx,0,0],[0,Iyy,0],[0,0,Izz]])
-T = 1 # time for complete trajectory
+T = 5 # time for complete trajectory
 
 # Model coefficients with Forces and Torques
 k = 3.876e-5
@@ -545,7 +545,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
     #desired_pos_info = traj_planner()
     
 	i = 0
-	n_run = 20
+	n_run = 6
 	irun = 0
 	#pos, Euler, vel, A_vel = reading_positional_info()
 
@@ -615,7 +615,7 @@ def main_control_loop(x_c, y_c, z_c, store_PWM, store_Euler, store_pos):
 			t += time.time() - start_loop
 
 		t = 0
-		i = (i + 1) % 10
+		i = (i + 1) % 3
 		irun += 1
 		if irun >= n_run:
 			break
@@ -640,20 +640,13 @@ def main():
     y_start = pos[1]
     z_start = pos[2]
 
-    x_coeffs = [[], [], [], [],[], [], [], [],[],[]]
-    y_coeffs = [[], [], [], [],[], [], [], [],[],[]]
-    z_coeffs = [[], [], [], [],[], [], [], [],[],[]]
-    waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start - 0.5],
-    			 [x_start, y_start, z_start - 0.5], 
-    			 [x_start, y_start, z_start - 0.5], 
-    			 [x_start, y_start, z_start - 0.5], 
-    			 [x_start, y_start, z_start - 0.5], 
-    			 [x_start, y_start, z_start - 0.5], 
-    			 [x_start, y_start, z_start - 0.5], 
-    			 [x_start, y_start, z_start - 0.5], [x_start, y_start, z_start]]
+    x_coeffs = [[], [], []]#[[], [], [], [],[], [], [], [],[],[]]
+    y_coeffs = [[], [], []]#[[], [], [], [],[], [], [], [],[],[]]
+    z_coeffs = [[], [], []]#[[], [], [], [],[], [], [], [],[],[]]
+    waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start - 0.5], [x_start, y_start, z_start]]
 
-    for i in range(10):
-        traj = TrajectoryGenerator(waypoints[i], waypoints[(i + 1) % 10], T)
+    for i in range(3):
+        traj = TrajectoryGenerator(waypoints[i], waypoints[(i + 1) % 3], T)
         traj.solve()
         x_coeffs[i] = traj.x_c
         y_coeffs[i] = traj.y_c
