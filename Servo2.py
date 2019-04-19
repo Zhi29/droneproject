@@ -644,7 +644,7 @@ def main():
 	Calculates the x, y, z coefficients for the four segments 
 	of the trajectory
 	"""
-	#calibration_ESC()
+	calibration_ESC()
 	wait_until_motor_is_ready()
 	loop_for(0.5, pwm0.set_duty_cycle, SERVO_MIN)
 	loop_for(0.5, pwm1.set_duty_cycle, SERVO_MIN)
@@ -675,7 +675,7 @@ def main():
 	warm_up = 0
 
 	t1 = time.time()
-	while warm_up < 1.0:
+	while warm_up < 3.0:
 		drive_motor(np.array([pwm_thres_min,pwm_thres_min,pwm_thres_min,pwm_thres_min]))
 		warm_up = time.time() - t1
 
