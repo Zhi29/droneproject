@@ -655,7 +655,7 @@ def main():
 	x_coeffs = [[], [], []]#[[], [], [], [],[], [], [], [],[],[]]
 	y_coeffs = [[], [], []]#[[], [], [], [],[], [], [], [],[],[]]
 	z_coeffs = [[], [], []]#[[], [], [], [],[], [], [], [],[],[]]
-	waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start - 0.2], [x_start, y_start, z_start]]
+	waypoints = [[x_start, y_start, z_start], [x_start, y_start, z_start - 0.5], [x_start, y_start, z_start]]
 
 	for i in range(3):
 		traj = TrajectoryGenerator(waypoints[i], waypoints[(i + 1) % 3], T)
