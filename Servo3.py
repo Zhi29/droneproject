@@ -671,7 +671,7 @@ def main():
 	warm_up = 0
 
 	t1 = time.time()
-	while warm_up < 3.0:
+	while warm_up < 6.0:
 		drive_motor(np.array([pwm_thres_min,pwm_thres_min,pwm_thres_min,pwm_thres_min]))
 		warm_up = time.time() - t1
 
