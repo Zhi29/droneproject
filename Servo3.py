@@ -359,7 +359,7 @@ K_p_Pose = np.array([[K_p_roll,0,0],[0,K_p_pitch,0],[0,0,K_p_yaw]])
 K_d_Pose = np.array([[K_d_roll,0,0],[0,K_d_pitch,0],[0,0,K_d_yaw]])
 
 
-def position_control(desired_pos_info, pos, vel, loop): #input should be generated trajectory
+def position_control(desired_pos_info, pos, vel): #input should be generated trajectory
 	#calculate errors of position, velocity and acceleration.
 	desired_pos, desired_vel, acc_desired, desired_yaw = desired_pos_info
 	pos_error = desired_pos - pos
@@ -385,9 +385,6 @@ def position_control(desired_pos_info, pos, vel, loop): #input should be generat
 	#judge = (np.abs(pos_error) <= 0.02)
 	#if judge[0] == True and judge[1] == True and judge[2] == True:
 	#	loop = False
-	judge = np.abs(pos_error[2]) <= 0.02
-	if judge == True:
-		loop = False
 
 
 
@@ -608,7 +605,7 @@ def main_control_loop(x_c, y_c, z_c):
 		#print("pos in the position: ", pos)
 
 
-		u1, desired_pos, loop = position_control(desired_pos_info, pos, vel, loop)
+		u1, desired_pos = position_control(desired_pos_info, pos, vel)
 
 		#for ii in range(2):
 		#pos, Euler, vel, A_vel = reading_positional_info()
