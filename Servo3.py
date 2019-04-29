@@ -390,7 +390,7 @@ def position_control(desired_pos_info, pos, vel): #input should be generated tra
 
 	#des_Euler_store.append(desired_pose)
 
-	return u1, desired_pose, loop
+	return u1, desired_pose
 
 
 def attitude_control(Euler, A_vel, desired_pose): #the inputs are desired Euler angle and angular rate and feedback pose info
