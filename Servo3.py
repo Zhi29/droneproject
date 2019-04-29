@@ -494,10 +494,10 @@ def drive_motor(control_PWM):
 		#control_PWM[k] = ("%.3f" % control_PWM[k])
 		#control_PWM[k] = format(control_PWM[k], '.4g')
 	#print(control_PWM)
-	loop_for(0.00005, pwm0.set_duty_cycle, control_PWM[0])
-	loop_for(0.00005, pwm1.set_duty_cycle, control_PWM[1])
-	loop_for(0.00005, pwm2.set_duty_cycle, control_PWM[2])
-	loop_for(0.00005, pwm3.set_duty_cycle, control_PWM[3])
+	loop_for(0.0001, pwm0.set_duty_cycle, control_PWM[0])
+	loop_for(0.0001, pwm1.set_duty_cycle, control_PWM[1])
+	loop_for(0.0001, pwm2.set_duty_cycle, control_PWM[2])
+	loop_for(0.0001, pwm3.set_duty_cycle, control_PWM[3])
 
 def calculate_position(c, t):
 	"""
@@ -671,7 +671,7 @@ def main():
 	warm_up = 0
 
 	t1 = time.time()
-	while warm_up < 6.0:
+	while warm_up < 3.0:
 		drive_motor(np.array([pwm_thres_min,pwm_thres_min,pwm_thres_min,pwm_thres_min]))
 		warm_up = time.time() - t1
 
