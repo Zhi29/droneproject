@@ -577,6 +577,10 @@ def main_control_loop(x_c, y_c, z_c):
 		des_y_acc = calculate_acceleration(y_c[i], T)[0]
 		des_z_acc = calculate_acceleration(z_c[i], T)[0]
 
+		print("x, y, z: ", des_x_pos, des_y_pos, des_z_pos)
+		print("vel: ", des_x_vel, des_y_vel, des_z_vel)
+		print("acc: ", des_x_acc, des_y_acc, des_z_acc)
+
 		#put the desired values into arrays
 		desired_pos = np.array ([des_x_pos, des_y_pos, des_z_pos])
 		desired_vel = np.array ([des_x_vel, des_y_vel, des_z_vel])
