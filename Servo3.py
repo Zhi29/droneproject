@@ -494,10 +494,10 @@ def drive_motor(control_PWM):
 		#control_PWM[k] = ("%.3f" % control_PWM[k])
 		#control_PWM[k] = format(control_PWM[k], '.4g')
 	#print(control_PWM)
-	loop_for(0.0001, pwm0.set_duty_cycle, control_PWM[0])
-	loop_for(0.0001, pwm1.set_duty_cycle, control_PWM[1])
-	loop_for(0.0001, pwm2.set_duty_cycle, control_PWM[2])
-	loop_for(0.0001, pwm3.set_duty_cycle, control_PWM[3])
+	loop_for(0.00005, pwm0.set_duty_cycle, control_PWM[0])
+	loop_for(0.00005, pwm1.set_duty_cycle, control_PWM[1])
+	loop_for(0.00005, pwm2.set_duty_cycle, control_PWM[2])
+	loop_for(0.00005, pwm3.set_duty_cycle, control_PWM[3])
 
 def calculate_position(c, t):
 	"""
@@ -577,9 +577,9 @@ def main_control_loop(x_c, y_c, z_c):
 		des_y_acc = calculate_acceleration(y_c[i], T)[0]
 		des_z_acc = calculate_acceleration(z_c[i], T)[0]
 
-		print("x, y, z: ", des_x_pos, des_y_pos, des_z_pos)
-		print("vel: ", des_x_vel, des_y_vel, des_z_vel)
-		print("acc: ", des_x_acc, des_y_acc, des_z_acc)
+		#print("x, y, z: ", des_x_pos, des_y_pos, des_z_pos)
+		#print("vel: ", des_x_vel, des_y_vel, des_z_vel)
+		#print("acc: ", des_x_acc, des_y_acc, des_z_acc)
 
 		#put the desired values into arrays
 		desired_pos = np.array ([des_x_pos, des_y_pos, des_z_pos])
@@ -643,9 +643,9 @@ def main():
 	calibration_ESC()
 	wait_until_motor_is_ready()
 	loop_for(0.5, pwm0.set_duty_cycle, SERVO_MIN)
-	loop_for(0.5, pwm1.set_duty_cycle, SERVO_MIN)
-	loop_for(0.5, pwm2.set_duty_cycle, SERVO_MIN)
-	loop_for(0.5, pwm3.set_duty_cycle, SERVO_MIN)
+	loop_for(0.1, pwm1.set_duty_cycle, SERVO_MIN)
+	loop_for(0.1, pwm2.set_duty_cycle, SERVO_MIN)
+	loop_for(0.1, pwm3.set_duty_cycle, SERVO_MIN)
 
 	pos, _, _, _ = reading_positional_info()
 	x_start = pos[0]
