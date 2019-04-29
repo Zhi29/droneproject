@@ -629,7 +629,7 @@ def main_control_loop(x_c, y_c, z_c):
 
 		t = time.time() - start_time
 		#print("time spend: ", t)
-		if t >= 10:
+		if t >= 8:
 			break
 
 	print("Done")
