@@ -567,7 +567,7 @@ def main_control_loop(x_c, y_c, z_c):
 	t_list = np.linspace(t, T, num_via_points)
 	start_time = time.time()
 
-	while loop:
+	while True:
 		start_loop = time.time()
 
 		des_x_pos = calculate_position(x_c[i], T)[0]
@@ -639,8 +639,8 @@ def main():
 	Calculates the x, y, z coefficients for the four segments 
 	of the trajectory
 	"""
-	calibration_ESC()
-	wait_until_motor_is_ready()
+	#calibration_ESC()
+	#wait_until_motor_is_ready()
 	loop_for(0.5, pwm0.set_duty_cycle, SERVO_MIN)
 	loop_for(0.5, pwm1.set_duty_cycle, SERVO_MIN)
 	loop_for(0.5, pwm2.set_duty_cycle, SERVO_MIN)
