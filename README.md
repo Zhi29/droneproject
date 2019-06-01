@@ -7,6 +7,10 @@ This is a project of controlling a drone in and indoor environment(GPS denied)
 This simulation is based on the following git repo:
     https://github.com/AtsushiSakai/PythonRobotics
     
+All the code for simulation is in drone_3d_trajectory_following folder. 
+    
+    python drone_simulation.py
+
 Here is the gif of the simulation
 
 
