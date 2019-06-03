@@ -24,3 +24,7 @@ The navio folder contains some neccesary file for hardware read and out.
 The indoor localization is realized by using 6 cameras optitrack motion capture system. We use ROS package vrpn_client_ros to receive the streaming data from ground station of optitrack.
 
 The ROS topic is converted to basic numpy array and sending to the control board of the drone by using zeromq technique.
+
+The diagram for the system is showing in the following figure:
+
+![image](http://github.com/Zhi29/droneproject/raw/master/pic/system.png)
