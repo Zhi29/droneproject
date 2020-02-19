@@ -27,4 +27,4 @@ The ROS topic is converted to basic numpy array and sending to the control board
 
 The diagram for the system is showing in the following figure:
 
-![image](http://github.com/Zhi29/droneproject/raw/master/pic/system.png)
+![](/pic/system.png)
